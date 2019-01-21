@@ -155,7 +155,6 @@ class Home extends Component {
           }
         });
   }
-
   onSignIn(){
     const {
       signInPassword,
@@ -198,7 +197,6 @@ class Home extends Component {
     //post request al backend
 
   }
-
   logout(){
     this.setState({
       isLoading: true,

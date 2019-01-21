@@ -109,11 +109,8 @@ module.exports = (app) => {
           success: true,
           message: 'Good'
         });
-
       }
-
     });
-
   });
   app.post('/api/account/signup', (req, res, next) => {
     const {body} = req;
