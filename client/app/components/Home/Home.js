@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dashboard } from '../Dashboard/Dashboard'
+
 import 'whatwg-fetch';
 import {
   getFromStorage,
