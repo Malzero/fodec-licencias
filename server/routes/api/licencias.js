@@ -12,7 +12,7 @@ module.exports = (app) => {
           message: 'Error del servidor'
         });
       }
-      if (licencias.length !== 1){
+      if (licencias.length < 1){
         return res.send({
           success: false,
           message: 'Error, invalido'
