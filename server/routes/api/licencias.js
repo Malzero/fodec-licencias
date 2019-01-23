@@ -5,7 +5,7 @@ module.exports = (app) => {
   app.get('/api/admin/licencias/get', (req, res) => {
 
     Licencia.find({}, (err, licencias) => {
-      let licenciasMap = {};
+      let licenciasMap = [];
       if(err){
         return res.send({
           success: false,
@@ -18,8 +18,11 @@ module.exports = (app) => {
           message: 'Error, invalido'
         });
       } else {
+        let i = 0;
         licencias.forEach(function (licencia) {
-          licenciasMap[licencia._id] = licencia;
+          licenciasMap[i] = licencia;
+          console.log(licencia);
+          i++;
         });
         return res.send(licenciasMap);
       }

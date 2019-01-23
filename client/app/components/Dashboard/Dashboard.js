@@ -10,6 +10,7 @@ class Dashboard extends Component {
     this.state = {
       licencias: [],
       data: [],
+      temp: [],
     };
     this.getTabla = this.getTabla.bind(this);
     this.renderEditable = this.renderEditable.bind(this);
@@ -21,7 +22,8 @@ class Dashboard extends Component {
   getTabla() {
     fetch('/api/admin/licencias/get')
       .then(results => results.json())
-      .then(results => this.setState({licencias: results}))
+      .then(results => this.setState({licencias: results}))//this.setState({licencias: results}))
+      .catch(error => console.log("parsing fail", error))
   }
 
 
@@ -44,7 +46,22 @@ class Dashboard extends Component {
   }
 
   render() {
-    const{licencias} = this.props;
+    let temp = [];
+
+    //console.log(JSON.parse(JSON.stringify(this.state.licencias))[0]);
+    temp.push(JSON.parse(JSON.stringify(this.state.licencias))[0]);
+    temp.push(JSON.parse(JSON.stringify(this.state.licencias))[1]);
+    if (this.state.licencias.length > 1){
+      console.log(this.state.licencias);
+    }
+
+   // this.state.data.push(this.state.licencias[0]);
+    //temp.push(JSON.parse(JSON.stringify(this.state.licencias[1]))) ;
+    //console.log(temp);
+    const data = this.state.licencias;
+    if (data.length > 1) {
+      console.log(JSON.stringify(this.state.licencias));
+    }
     const columns =
       [{
       Header: 'id_licencia',
@@ -93,7 +110,7 @@ class Dashboard extends Component {
       {
         Header: 'estado',
         accessor: 'estado', // String-based value accessors!
-        Cell: this.renderEditable
+        //Cell: this.renderEditable
       },
       {
         Header: 'recuperado',
@@ -108,25 +125,12 @@ class Dashboard extends Component {
         },
     ];
 
-    //console.log(JSON.stringify(this.state.licencias));
-    let tabla;
-    tabla = JSON.stringify(this.state.licencias);
-    console.log("tabla");
-    //console.log(tabla);
-    if (this.state.licencias.length > 0)
-    {
-      console.log(this.state.licencias.length);
-    }
 
-    this.state.data.push(JSON.stringify(this.state.licencias[0]));
-    console.log("data");
-    console.log(this.state.data);
     return (
       <div>
-          <h1>{}</h1>
+          <p>{/*data*/}</p>
           <ReactTable
-            //data={tabla}//{data}
-
+            data={data}//{data}
             columns={columns}
             filterable
           />
