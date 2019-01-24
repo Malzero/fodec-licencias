@@ -1,4 +1,5 @@
 const Licencia = require('../../models/Licencias');
+let XLSX = require('xlsx');
 
 module.exports = (app) => {
 
@@ -21,7 +22,6 @@ module.exports = (app) => {
         let i = 0;
         licencias.forEach(function (licencia) {
           licenciasMap[i] = licencia;
-          console.log(licencia);
           i++;
         });
         return res.send(licenciasMap);
@@ -170,5 +170,41 @@ module.exports = (app) => {
       })
     });
 
-  })
+  });
+  app.get('/api/admin/liencias/convert', (req, res) => {
+
+    let buf = fs.readFileSync(new URL('file://localhost/server/routes/test.xls'));
+    if (!buf)
+    {
+      return res.send({
+        success: false,
+        message: 'Error, no se pudo abrir el archivo'
+      })
+    }
+    else {
+      let wb = XLSX.read(buf, {type:'buffer'});
+      if (!wb)
+      {
+        return res.send({
+          success: false,
+          message: 'Error, no se pudo leer el archivo'
+        })
+      } else
+      {
+        let excl = XLSX.utils.sheet_to_json(wb);
+        if (!excl)
+        {
+          return res.send({
+            success: false,
+            message: 'Error, no se pudo convertir el archivo'
+          })
+        }
+        else {
+          console.log("contenido excel");
+          console.log(excl);
+          return res.status(200).send(excl);
+        }
+      }
+    }
+  });
 };

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import 'whatwg-fetch';
 import {
   getFromStorage,
@@ -313,6 +312,7 @@ class Home extends Component {
     }
     return (
       <div>
+
         <p>Account</p>
         <button onClick={this.logout}>Cerrar Sesión</button>
       </div>

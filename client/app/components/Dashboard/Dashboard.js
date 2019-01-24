@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import ReactTable from 'react-table';
+import Converter from '../Converter/Converter';
 
 class Dashboard extends Component {
 
@@ -59,9 +59,7 @@ class Dashboard extends Component {
     //temp.push(JSON.parse(JSON.stringify(this.state.licencias[1]))) ;
     //console.log(temp);
     const data = this.state.licencias;
-    if (data.length > 1) {
-      console.log(JSON.stringify(this.state.licencias));
-    }
+
     const columns =
       [{
       Header: 'id_licencia',
@@ -129,6 +127,7 @@ class Dashboard extends Component {
     return (
       <div>
           <p>{/*data*/}</p>
+          <Converter/>
           <ReactTable
             data={data}//{data}
             columns={columns}
