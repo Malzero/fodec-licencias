@@ -61,5 +61,8 @@
     "xls-to-json": "^0.5.1",
     "xlsx": "^0.14.1",
     "xlsx-to-json": "^0.3.0"
+  },
+  "devDependencies": {
+    "url-loader": "^1.1.2"
   }
 }
