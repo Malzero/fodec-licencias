@@ -128,6 +128,7 @@ class Dashboard extends Component {
       <div>
           <p>{/*data*/}</p>
           <Converter/>
+
           <ReactTable
             data={data}//{data}
             columns={columns}

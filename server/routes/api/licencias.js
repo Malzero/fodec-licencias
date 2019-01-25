@@ -1,8 +1,14 @@
 const Licencia = require('../../models/Licencias');
-let XLSX = require('xlsx');
+let fs = require('fs'), path = require('path'), URL = require('url');
+let convertExcel = require('excel-as-json').processFile;
+
+
+
 
 module.exports = (app) => {
 
+  //app.use(logit.mw);
+ // app.use(cors.mw);
   app.get('/api/admin/licencias/get', (req, res) => {
 
     Licencia.find({}, (err, licencias) => {
@@ -22,6 +28,7 @@ module.exports = (app) => {
         let i = 0;
         licencias.forEach(function (licencia) {
           licenciasMap[i] = licencia;
+          console.log(licencia);
           i++;
         });
         return res.send(licenciasMap);
@@ -172,39 +179,30 @@ module.exports = (app) => {
 
   });
   app.get('/api/admin/liencias/convert', (req, res) => {
-
-    let buf = fs.readFileSync(new URL('file://localhost/server/routes/test.xls'));
-    if (!buf)
-    {
-      return res.send({
-        success: false,
-        message: 'Error, no se pudo abrir el archivo'
-      })
-    }
-    else {
-      let wb = XLSX.read(buf, {type:'buffer'});
-      if (!wb)
-      {
-        return res.send({
-          success: false,
-          message: 'Error, no se pudo leer el archivo'
-        })
-      } else
-      {
-        let excl = XLSX.utils.sheet_to_json(wb);
-        if (!excl)
-        {
-          return res.send({
-            success: false,
-            message: 'Error, no se pudo convertir el archivo'
-          })
-        }
-        else {
-          console.log("contenido excel");
-          console.log(excl);
-          return res.status(200).send(excl);
-        }
+    let options = [{
+      sheet:'1',
+      isColOriented: false,
+      omitEmtpyFields: false,
+    }];
+    console.log("entre a la api convert");
+    let src = './test.xls';
+    let dst = [];
+    let result = [];
+    result = convertExcel(src, null, (err, result) => {
+      if (err){
+        console.log("entre a err");
+        console.log(err);
       }
-    }
+
+      console.log(result);
+    });
+    console.log(result);
+    return res.json(result);
+
+
   });
+
+
+
+
 };
