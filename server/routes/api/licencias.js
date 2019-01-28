@@ -1,6 +1,6 @@
 const Licencia = require('../../models/Licencias');
 let fs = require('fs'), path = require('path'), URL = require('url');
-let convertExcel = require('excel-as-json').processFile;
+let convertExcel = require('js-xlsx');
 
 
 
@@ -184,19 +184,23 @@ module.exports = (app) => {
       isColOriented: false,
       omitEmtpyFields: false,
     }];
-    console.log("entre a la api convert");
+    //console.log("entre a la api convert");
     let src = './test.xls';
     let dst = [];
     let result = [];
-    result = convertExcel(src, null, (err, result) => {
+    result = convertExcel.readFile(src, {type:'buffer'});
+    /*result = convertExcel(src, undefined, undefined,(err, result) => {
       if (err){
         console.log("entre a err");
         console.log(err);
       }
-
+      console.log('asdf');
       console.log(result);
-    });
-    console.log(result);
+    });*/
+    let sheet = result.SheetNames[0];
+    sheet = result.Sheets[sheet];
+    result = convertExcel.utils.sheet_to_json(sheet,{header:1});
+    //console.log(result);
     return res.json(result);
 
 
