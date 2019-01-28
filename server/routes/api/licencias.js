@@ -1,14 +1,32 @@
+
 const Licencia = require('../../models/Licencias');
 let fs = require('fs'), path = require('path'), URL = require('url');
 let convertExcel = require('js-xlsx');
+const fetch = require('node-fetch');
 
+function upLicencia(converted) {
 
+  //sacar state
+  //post request al backend
+  console.log('muestro converted');
+  //console.log(converted);
+  fetch('http://localhost:8080/api/admin/licencias/post', {
+    method: 'post',
+    body: JSON.stringify(converted),
+    headers: {'Content-Type' : 'application/json'},
+  })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
 
+}
 
 module.exports = (app) => {
 
   //app.use(logit.mw);
  // app.use(cors.mw);
+
+
   app.get('/api/admin/licencias/get', (req, res) => {
 
     Licencia.find({}, (err, licencias) => {
@@ -83,54 +101,8 @@ module.exports = (app) => {
         message: 'Error, dias no puede estar en vacío'
       })
     }
-    if (!fecha_inicio){
-      return res.send({
-        success: false,
-        message: 'Error, fecha_i no puede estar en vacío'
-      })
-    }
-    if (!fecha_termino){
-      return res.send({
-        success: false,
-        message: 'Error, fecha_t no puede estar en vacío'
-      })
-    }
-    if (!dias_pago){
-      return res.send({
-        success: false,
-        message: 'Error, dias pago no puede estar en vacío'
-      })
-    }
-    if (!mes_pago){
-      return res.send({
-        success: false,
-        message: 'Error, mes pago no puede estar en vacío'
-      })
-    }
-    if (!sis_salud){
-      return res.send({
-        success: false,
-        message: 'Error, sis_salud no puede estar en vacío'
-      })
-    }
-    if (!pago_fodec){
-      return res.send({
-        success: false,
-        message: 'Error, pago fodec no puede estar en vacío'
-      })
-    }
-    if (!recuperado){
-      return res.send({
-        success: false,
-        message: 'Error, recuperado no puede estar en vacío'
-      })
-    }
-    if (!perdida){
-      return res.send({
-        success: false,
-        message: 'Error, perdida no puede estar en vacío'
-      })
-    }
+
+
     Licencia.find({
       id_licencia: id_licencia
 
@@ -189,21 +161,47 @@ module.exports = (app) => {
     let dst = [];
     let result = [];
     result = convertExcel.readFile(src, {type:'buffer'});
-    /*result = convertExcel(src, undefined, undefined,(err, result) => {
-      if (err){
-        console.log("entre a err");
-        console.log(err);
-      }
-      console.log('asdf');
-      console.log(result);
-    });*/
     let sheet = result.SheetNames[0];
     sheet = result.Sheets[sheet];
     result = convertExcel.utils.sheet_to_json(sheet,{header:1});
     //console.log(result);
-    return res.json(result);
+    let temp=[];
+    let col=result[3][0].split(": ")[1];
 
+    result.forEach(function(element){
+      if(element.length > 0)
+        //get colegio
+        if(element.length === 11){
+          let resp = {
+            colegio: '',
+            rut: '',
+            nombre: '',
+            id_licencia: '',
+            dias: 0,
+            fecha_inicio: '',
+            fecha_termino: '',
+            dias_pago: 0,
+            mes_pago: '',
+            sis_salud: '',
+            pago_fodec: 0,
+            recuperado: 0,
+            perdida: 0,
+          } ;
 
+          resp.colegio = col;
+          resp.rut = element[2];
+          resp.nombre= element[1];
+          resp.id_licencia= element[4];
+          resp.dias= element[10];
+          resp.fecha_inicio= element[6];
+          resp.fecha_termino= element[7];
+          console.log(element[8]);
+          temp.push(resp);
+          upLicencia(resp);
+        }
+    });
+    //upLicencia(temp);
+    return res.json(temp);
   });
 
 

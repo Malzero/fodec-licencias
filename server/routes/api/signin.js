@@ -160,7 +160,7 @@ module.exports = (app) => {
     //2 guardar
 
     User.find({
-      email: email
+      user: user
 
     }, (err, previousUsers) => {
       if (err){
@@ -196,8 +196,6 @@ module.exports = (app) => {
 
     const {query} = req;
     const {token} = query;
-    //token = test
-    //verificar si el token es de un tipo y si no esta eliminado
 
     UserSession.findOneAndUpdate({
       _id: token,
