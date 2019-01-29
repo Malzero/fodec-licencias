@@ -4,6 +4,7 @@ import {
   getFromStorage,
   setInStorage
 } from "../../utils/storage";
+import  { Redirect } from 'react-router-dom';
 
 class Home extends Component {
   constructor(props) {
@@ -314,6 +315,7 @@ class Home extends Component {
       <div>
 
         <p>Account</p>
+        <Redirect to='/dashboard'  />
         <button onClick={this.logout}>Cerrar Sesión</button>
       </div>
 

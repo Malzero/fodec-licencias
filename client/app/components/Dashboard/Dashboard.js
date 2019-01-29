@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import ReactTable from 'react-table';
 import Converter from '../Converter/Converter';
+import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
+import Button from "react-bootstrap/es/Button";
 
 class Dashboard extends Component {
 
@@ -126,9 +128,13 @@ class Dashboard extends Component {
 
     return (
       <div>
-          <p>{/*data*/}</p>
-          <Converter/>
+        <ButtonToolbar>
+          <Button bsStyle="primary" bsSize="large">
+            Importar datos
+          </Button>
+        </ButtonToolbar>
 
+          <Converter/>
           <ReactTable
             data={data}//{data}
             columns={columns}
