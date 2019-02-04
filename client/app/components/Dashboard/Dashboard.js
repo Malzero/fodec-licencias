@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactTable from 'react-table';
 import Converter from '../Converter/Converter';
 import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
+import ModalTest from '../ModalTest/ModalTest'
 import Button from "react-bootstrap/es/Button";
 
 class Dashboard extends Component {
@@ -129,9 +130,7 @@ class Dashboard extends Component {
     return (
       <div>
         <ButtonToolbar>
-          <Button bsStyle="primary" bsSize="large">
-            Importar datos
-          </Button>
+          <ModalTest />
         </ButtonToolbar>
 
           <Converter/>

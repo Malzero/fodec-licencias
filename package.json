@@ -48,6 +48,7 @@
     "react-dom": "^16.2.0",
     "react-hot-loader": "^4.0.0",
     "react-json-excel": "^1.0.0",
+    "react-modal": "^3.8.1",
     "react-native-fs": "^2.13.3",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
