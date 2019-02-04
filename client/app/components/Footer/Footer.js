@@ -3,7 +3,9 @@ import React from 'react';
 const Footer = () => (
   <footer>
     <hr />
-    <p>Footer</p>
+    <div align="center">
+    <p>FODEC - Fundación Oficio Diocesano de Educación Católica de Valparaíso</p>
+    </div>
   </footer>
 );
 

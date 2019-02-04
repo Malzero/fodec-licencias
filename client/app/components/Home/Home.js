@@ -5,6 +5,14 @@ import {
   setInStorage
 } from "../../utils/storage";
 import  { Redirect } from 'react-router-dom';
+import Form from "react-bootstrap/es/Form";
+import FormGroup from "react-bootstrap/es/FormGroup";
+import Col from "react-bootstrap/es/Col";
+import FormControl from "react-bootstrap/es/FormControl";
+import Checkbox from "react-bootstrap/es/Checkbox";
+import Button from "react-bootstrap/es/Button";
+import ControlLabel from "react-bootstrap/es/ControlLabel";
+import ResponsiveEmbed from "react-bootstrap/es/ResponsiveEmbed";
 
 class Home extends Component {
   constructor(props) {
@@ -246,33 +254,66 @@ class Home extends Component {
     } = this.state;
 
     if (isLoading){
-      return (<div><p>Cargando...</p></div>);
+      return (<h1>Loading...</h1>);
     }
     if (!token){
       return (
-        <div>
-          <div>
+       <div align="center">
+        <div style={{ width: 350, height: 'auto', align:'center'}}>
+
+
             {
               (signInError) ? (
                 <p>{signInError}</p>
               ) : (null)
             }
-            <p>Sign In</p>
-            <input
-              type="text"
-              placeholder="User"
-              value={signInUser}
-              onChange={this.onTextboxChangeSignInUser}
 
-            /> <br/>
-            <input
-              type="password"
-              placeholder="Password"
-              value={signInPassword}
-              onChange={this.onTextboxChangeSignInPassword}
-            /> <br/>
-            <button onClick={this.onSignIn}>Sign In</button>
-          </div>
+            <br/>
+            <br/>
+
+            <Form horizontal>
+              <FormGroup controlId="formHorizontalEmail">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Usuario
+                </Col>
+                <Col sm={50}>
+                        <FormControl type="text"
+                                     placeholder="User"
+                                     value={signInUser}
+                                     onChange={this.onTextboxChangeSignInUser}/>
+                </Col>
+              </FormGroup>
+
+              <FormGroup controlId="formHorizontalPassword">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Contraseña
+                </Col>
+                <Col sm={50}>
+                        <FormControl type="password"
+                                     placeholder="Password"
+                                     value={signInPassword}
+                                     onChange={this.onTextboxChangeSignInPassword} />
+                </Col>
+              </FormGroup>
+
+              <div align="right">
+              <FormGroup>
+                <Col smOffset={2} sm={10}>
+                  <Button type="submit" bsStyle="success" onClick={this.onSignIn}>Ingresar</Button>
+                </Col>
+              </FormGroup>
+              </div>
+            </Form>
+
+
+
+
+
+
+
+
+
+
           <br/>
           <br/>
           <div>
@@ -281,34 +322,9 @@ class Home extends Component {
                 <p>{signUpError}</p>
               ) : (null)
             }
-            <p>Sign Up</p>
-            <input type="text" placeholder="Primer Nombre"
-                   value={signUpFirstName}
-                   onChange={this.onTextboxChangeSignUpFirstName}
-            /> <br/>
-            <input type="text" placeholder="Apellido"
-                   value={signUpLastName}
-                   onChange={this.onTextboxChangeSignUpLastName}
-            /> <br/>
-            <input type="text" placeholder="User"
-                   value={signUpUser}
-                   onChange={this.onTextboxChangeSignUpUser}
-            /> <br/>
-            <input type="email" placeholder="Email"
-                   value={signUpEmail}
-                   onChange={this.onTextboxChangeSignUpEmail}
-            /> <br/>
-            <input type="text" placeholder="Rol"
-                   value={signUpRol}
-                   onChange={this.onTextboxChangeSignUpRol}
-            /> <br/>
-            <input type="password" placeholder="Password"
-                   value={signUpPassword}
-                   onChange={this.onTextboxChangeSignUpPassword}
-            /> <br/>
-            <button onClick={this.onSignUp}>Sign Up</button>
-          </div>
 
+          </div>
+        </div>
         </div>)
     }
     return (

@@ -15,8 +15,6 @@ const Header = () => (
       </NavItem>
     </Nav>
     <Navbar.Header>
-
-
       <Navbar.Brand>
 
         <a href="#brand" >Control de Licencias FODEC</a>
@@ -26,7 +24,7 @@ const Header = () => (
     </Navbar.Header>
     <Navbar.Collapse>
 
-      <Nav pullLeft>
+      <Nav pullLeft bsStyle="large">
         <NavItem eventKey={1} href="#">
           Generar Reporte
         </NavItem>
