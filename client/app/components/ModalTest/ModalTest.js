@@ -1,6 +1,8 @@
 import React from 'react';
 import Modal from 'react-bootstrap/es/Modal';
 import Button from "react-bootstrap/es/Button";
+import { FilePond } from 'react-filepond';
+import 'filepond/dist/filepond.css';
 
 class ModalTest extends React.Component {
   constructor(props, context) {
@@ -33,7 +35,14 @@ class ModalTest extends React.Component {
           <Modal.Header closeButton>
             <Modal.Title>Modal heading</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+          <Modal.Body>
+
+            <p>
+              Subir Archivo SOFTLAND 1
+            </p>
+            <FilePond/>
+
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleClose}>
               Close

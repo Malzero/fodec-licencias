@@ -18,6 +18,7 @@ import Dashboard from "./components/Dashboard/Dashboard"
 import HelloWorld from './components/HelloWorld/HelloWorld';
 
 import './styles/styles.scss';
+import 'filepond/dist/filepond.min.css';
 
 render((
   <Router>

@@ -37,6 +37,20 @@ module.exports = merge(commonConfig, {
             }
           }
         ]
+      },
+      {
+        test: /\.css$/,
+        include: /node_modules/,
+        loader: [
+          require.resolve('style-loader'),
+          {
+            loader: require.resolve('css-loader'),
+            options: {
+              importLoaders: 1,
+              minimize: true,
+            },
+          }
+        ]
       }
     ]
   }
