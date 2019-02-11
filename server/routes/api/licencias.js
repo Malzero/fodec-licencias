@@ -1,8 +1,14 @@
 
 const Licencia = require('../../models/Licencias');
-let fs = require('fs'), path = require('path'), URL = require('url');
+//let request = require('superagent');
+//let agent1 = request.agent();
+
 let convertExcel = require('js-xlsx');
+//let multer = require("multer");
+//let upload = multer({ dest: "../server/routes/tmp/" });
 const fetch = require('node-fetch');
+
+
 
 function upLicencia(converted) {
 
@@ -23,8 +29,6 @@ function upLicencia(converted) {
 
 module.exports = (app) => {
 
-  //app.use(logit.mw);
- // app.use(cors.mw);
 
 
   app.get('/api/admin/licencias/get', (req, res) => {
@@ -144,18 +148,20 @@ module.exports = (app) => {
         }
         return res.send({
           success: true,
-          message: 'Licencia ingresaada'
+          message: 'Licencia ingresada'
         })
       })
     });
 
   });
-  app.get('/api/admin/liencias/convert', (req, res) => {
+  app.get('/api/admin/licencias/convert', (req, res) => {
     let options = [{
       sheet:'1',
       isColOriented: false,
       omitEmtpyFields: false,
     }];
+
+
     //console.log("entre a la api convert");
     let src = './test.xls';
     let dst = [];
@@ -203,6 +209,8 @@ module.exports = (app) => {
     //upLicencia(temp);
     return res.json(temp);
   });
+
+
 
 
 

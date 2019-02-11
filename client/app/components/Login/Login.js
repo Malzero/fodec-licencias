@@ -1,10 +1,9 @@
 import React from 'react';
 
-import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 
 
-const App = ({ children }) => (
+const Login = ({ children }) => (
   <>
 
 
@@ -17,5 +16,4 @@ const App = ({ children }) => (
   </>
 );
 
-export default App;
-
+export default Login;

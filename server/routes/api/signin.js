@@ -13,13 +13,13 @@ module.exports = (app) => {
     if (!user){
       return res.send({
         success: false,
-        message: 'Error, campo no puede estar en vacío'
+        message: 'Error, usuario no puede estar vacío'
       })
     }
     if (!password){
       return res.send({
         success: false,
-        message: 'Error, campo no puede estar en vacío'
+        message: 'Error, password no puede estar vacío'
       })
     }
 
@@ -33,17 +33,18 @@ module.exports = (app) => {
         });
       }
       if(users.length!== 1) {
-        return({
+        return res.send({
           success: false,
-          message: "Error, invalido"
+          message: "Nombre de usuario no válido"
         });
       }
 
       const user = users[0];
+
       if(!user.validPassword(password)) {
         return res.send({
           success: false,
-          message: 'Error, invalido'
+          message: 'Error, contraseña no válida'
         })
       }
       //Otherwise correct user
@@ -154,7 +155,7 @@ module.exports = (app) => {
 
     console.log('here');
     email = email.toLowerCase();
-
+    //email = email.trim ();
     //Pasos
     //1 verificar correo no existente
     //2 guardar

@@ -23,32 +23,42 @@ class ModalTest extends React.Component {
   handleShow() {
     this.setState({ show: true });
   }
-
   render() {
     return (
       <>
         <Button variant="primary" onClick={this.handleShow}>
-          Launch demo modal
+          Carga Licencias Excel
         </Button>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Carga licencias Excel</Modal.Title>
           </Modal.Header>
           <Modal.Body>
 
+            <div>
             <p>
-              Subir Archivo SOFTLAND 1
+              Subir Archivo SOFTLAND parte 1
+            </p>
+              <FilePond
+                files={this.state.files}
+                allowMultiple={true}
+                server='http://localhost:8080/api/admin/licencias/upload'
+
+              />
+            </div>
+            <td/>
+            <div>
+            <p>
+              Subir Archivo SOFTLAND parte 2
             </p>
             <FilePond/>
+            </div>
 
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleClose}>
               Close
-            </Button>
-            <Button variant="primary" onClick={this.handleClose}>
-              Save Changes
             </Button>
           </Modal.Footer>
         </Modal>

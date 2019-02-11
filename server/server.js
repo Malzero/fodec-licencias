@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs');
 const historyApiFallback = require('connect-history-api-fallback');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -12,7 +11,6 @@ const webpackConfig = require('../webpack.config');
 
 const isDev = process.env.NODE_ENV !== 'production';
 const port  = process.env.PORT || 8080;
-
 
 // Configuration
 // ================================================================================================
