@@ -1,12 +1,9 @@
-
 const Licencia = require('../../models/Licencias');
-//let request = require('superagent');
-//let agent1 = request.agent();
-
 let convertExcel = require('js-xlsx');
-//let multer = require("multer");
-//let upload = multer({ dest: "../server/routes/tmp/" });
 const fetch = require('node-fetch');
+let fs = require('fs');
+var util = require('util');
+let multiparty = require('multiparty');
 
 
 
@@ -170,7 +167,6 @@ module.exports = (app) => {
     let sheet = result.SheetNames[0];
     sheet = result.Sheets[sheet];
     result = convertExcel.utils.sheet_to_json(sheet,{header:1});
-    //console.log(result);
     let temp=[];
     let col=result[3][0].split(": ")[1];
 
@@ -201,16 +197,31 @@ module.exports = (app) => {
           resp.dias= element[10];
           resp.fecha_inicio= element[6];
           resp.fecha_termino= element[7];
-          console.log(element[8]);
           temp.push(resp);
           upLicencia(resp);
         }
     });
-    //upLicencia(temp);
     return res.json(temp);
   });
 
   app.post('/api/admin/licencias/upload', (req, res) => {
+
+
+
+    let form = new multiparty.Form({ uploadDir: './server/uploads/files/softland1' });
+
+
+    form.parse(req, function(err, fields, files) {
+      console.log(JSON.parse(JSON.stringify(files['filepond'])).path);
+      Object.keys(files).forEach(function(name) {
+        console.log(name);
+      });
+
+      res.writeHead(200, {'content-type': 'text/plain'});
+      res.write('received upload:\n\n');
+      res.end(util.inspect({fields: fields, files: files}));
+    });
+
 
   });
 

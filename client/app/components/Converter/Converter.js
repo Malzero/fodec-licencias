@@ -22,10 +22,8 @@ class Converter extends Component{
   convert_to_json() {
 
     fetch('/api/admin/licencias/convert')
-      .then(results => console.log(results.json()))
       .then(results => this.setState({excelJason: results}))//this.setState({licencias: results}))
       .catch(error => console.log("parsing fail", error));
-    console.log(this.state.excelJason);
   }
   render() {
     //this.convert_to_json();

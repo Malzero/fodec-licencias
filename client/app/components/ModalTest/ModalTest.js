@@ -47,7 +47,7 @@ class ModalTest extends React.Component {
           <FilePond
            // ref={ref => this.pond = ref}
             files={this.state.files}
-            server="/api/admin/licencias/upload"
+            server="http://localhost:8080/api/admin/licencias/upload"
             oninit={() => this.handleInit() }
             onupdatefiles={fileItems => {
               // Set currently active file objects to this.state

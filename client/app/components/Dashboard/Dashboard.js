@@ -49,18 +49,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    let temp = [];
 
-    //console.log(JSON.parse(JSON.stringify(this.state.licencias))[0]);
-    temp.push(JSON.parse(JSON.stringify(this.state.licencias))[0]);
-    temp.push(JSON.parse(JSON.stringify(this.state.licencias))[1]);
-    if (this.state.licencias.length > 1){
-      console.log(this.state.licencias);
-    }
-
-   // this.state.data.push(this.state.licencias[0]);
-    //temp.push(JSON.parse(JSON.stringify(this.state.licencias[1]))) ;
-    //console.log(temp);
     const data = this.state.licencias;
 
     const columns =
