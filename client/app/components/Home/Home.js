@@ -312,27 +312,7 @@ class Home extends Component {
           <br/>
           <br/>
 
-          <div>
-            {
-              (signUpError) ? (
-                <p>{signUpError}</p>
-              ) : (null)
-            }
-            <p>Sign Up</p>
-            <input
-              type="text"
-              placeholder="User"
-              value={signUpUser}
-              onChange={this.onTextboxChangeSignUpUser}
-            /><br />
-            <input
-              type="password"
-              placeholder="Password"
-              value={signUpPassword}
-              onChange={this.onTextboxChangeSignUpPassword}
-            /><br />
-            <button onClick={this.onSignUp}>Sign Up</button>
-          </div>
+
 
 
         </div>
