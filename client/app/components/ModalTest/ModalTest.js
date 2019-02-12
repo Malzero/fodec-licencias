@@ -13,11 +13,15 @@ class ModalTest extends React.Component {
 
     this.state = {
       show: false,
+      files: []
     };
   }
 
   handleClose() {
     this.setState({ show: false });
+  }
+  handleInit() {
+    console.log('FilePond instance has initialised', this.pond);
   }
 
   handleShow() {
@@ -37,8 +41,27 @@ class ModalTest extends React.Component {
           </Modal.Header>
           <Modal.Body>
 
+          <p>
+            Subir Archivo SOFTLAND 1
+          </p>
+          <FilePond
+           // ref={ref => this.pond = ref}
+            files={this.state.files}
+            server="/api/admin/licencias/upload"
+            oninit={() => this.handleInit() }
+            onupdatefiles={fileItems => {
+              // Set currently active file objects to this.state
+              this.setState({
+                files: fileItems.map(fileItem => fileItem.file)
+              });
+            }}>
+          </FilePond>
+
+        </Modal.Body>
+          <Modal.Body>
+
             <p>
-              Subir Archivo SOFTLAND 1
+              Subir Archivo SOFTLAND 2
             </p>
             <FilePond/>
 

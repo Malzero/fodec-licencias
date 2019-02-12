@@ -204,6 +204,10 @@ module.exports = (app) => {
     return res.json(temp);
   });
 
+  app.post('/api/admin/licencias/upload', (req, res) => {
+
+  });
+
 
 
 
