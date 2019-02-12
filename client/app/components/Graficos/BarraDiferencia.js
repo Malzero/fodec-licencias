@@ -5,8 +5,10 @@ import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
 import ModalTest from '../ModalTest/ModalTest'
 
 
-import {BarChart} from 'react-easy-chart';
+import { Legend, Bar,BarChart,LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+
 import Footer from "../Footer/Footer";
+
 
 
 
@@ -131,52 +133,70 @@ class BarraDiferencia extends Component {
         },
       ];
 
+    const data2 = [
+      {
+        "name": "Cruz Blanca",
+        "Devolución Isapre": 4000,
+        "Pérdida FODEC": 2400,
+        "amt": 2400
+      },
+      {
+        "name": "Banmédica",
+        "Devolución Isapre": 3000,
+        "Pérdida FODEC": 1398,
+        "amt": 2210
+      },
+      {
+        "name": "Consalud",
+        "Devolución Isapre": 2000,
+        "Pérdida FODEC": 9800,
+        "amt": 2290
+      },
+      {
+        "name": "Masvida",
+        "Devolución Isapre": 2780,
+        "Pérdida FODEC": 3908,
+        "amt": 2000
+      },
+      {
+        "name": "Colmena",
+        "Devolución Isapre": 1890,
+        "Pérdida FODEC": 4800,
+        "amt": 2181
+      },
+      {
+        "name": "Vidatres",
+        "Devolución Isapre": 2390,
+        "Pérdida FODEC": 3800,
+        "amt": 2500
+      },
+      {
+        "name": "Fonasa",
+        "Devolución Isapre": 3490,
+        "Pérdida FODEC": 4300,
+        "amt": 2100
+      }
+    ];
+
 
     return (
 
       <div align="center">
+        <h4>Devolución isapres vs pago FODEC</h4>
 
-          <BarChart
-            axisLabels={{x: 'ISAPRE', y: 'My y Axis'}}
-            axes
-            grid
-            colorBars
-            height={250}
-            width={650}
-            data={[
-              {
-                x: 'Cruz Blanca',
-                y: 460500
-              },
-              {
-                x: 'Banmédica',
-                y: 265470
-              },
-              {
-                x: 'Consalud',
-                y: 15
-              },
-              {
-                x: 'Masvida',
-                y: 26
-              },
-              {
-                x: 'Colmena',
-                y: 46
-              },
-              {
-                x: 'Vidatres',
-                y: 26
-              },
-            ]}
-          />
-
-
-
+        <BarChart width={730} height={250} data={data2}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="Devolución Isapre" fill="green" />
+          <Bar dataKey="Pérdida FODEC" fill="#82ca9d" />
+        </BarChart>
 
 
         <br/>
-        <Converter/>
+
       <Footer/>
       </div>
     );
