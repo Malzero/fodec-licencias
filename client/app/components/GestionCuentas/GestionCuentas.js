@@ -14,7 +14,7 @@ import Button from "react-bootstrap/es/Button";
 import ControlLabel from "react-bootstrap/es/ControlLabel";
 import ResponsiveEmbed from "react-bootstrap/es/ResponsiveEmbed";
 
-class Home extends Component {
+class GestionCuentas extends Component {
   constructor(props) {
     super(props);
 
@@ -51,27 +51,27 @@ class Home extends Component {
   componentDidMount() {
     const obj = getFromStorage('the_main_app');
 
-      if (obj && obj.token){
-        const {token} = obj;
-        //verify token
-        fetch('/api/account/verify?token=' + token)
-          .then(res => res.json())
-          .then(json => {
-            if (json.success){
-              this.setState({
-                token,
-                isLoading: false
-              });
-            } else {
-              this.setState({
-                isLoading: false,
-              })
-            }
-          });
-      } else {
-        this.setState({
-          isLoading: false,
+    if (obj && obj.token){
+      const {token} = obj;
+      //verify token
+      fetch('/api/account/verify?token=' + token)
+        .then(res => res.json())
+        .then(json => {
+          if (json.success){
+            this.setState({
+              token,
+              isLoading: false
+            });
+          } else {
+            this.setState({
+              isLoading: false,
+            })
+          }
         });
+    } else {
+      this.setState({
+        isLoading: false,
+      });
     }
   }
   onTextboxChangeSignInUser(event) {
@@ -145,24 +145,24 @@ class Home extends Component {
     }).then(res => res.json())
       .then(json => {
 
-          if (json.success){
-            this.setState({
-              signUpError: json.message,
-              isLoading: false,
-              signUpFirstName: '',
-              signUpLastName: '',
-              signUpEmail: '',
-              signUpPassword: '',
-              signUpRol: '',
-              signUpUser: '',
-            });
-          } else {
-            this.setState({
-              signUpError: json.message,
-              isLoading: false,
-            });
-          }
-        });
+        if (json.success){
+          this.setState({
+            signUpError: json.message,
+            isLoading: false,
+            signUpFirstName: '',
+            signUpLastName: '',
+            signUpEmail: '',
+            signUpPassword: '',
+            signUpRol: '',
+            signUpUser: '',
+          });
+        } else {
+          this.setState({
+            signUpError: json.message,
+            isLoading: false,
+          });
+        }
+      });
   }
   onSignIn(){
     const {
@@ -209,7 +209,7 @@ class Home extends Component {
   logout(){
     this.setState({
       isLoading: true,
-      });
+    });
     const obj = getFromStorage('the_main_app');
 
     if (obj && obj.token){
@@ -237,10 +237,6 @@ class Home extends Component {
     window.location.reload();
 
   }
-
-
-
-
   render() {
     const {
       isLoading,
@@ -258,12 +254,12 @@ class Home extends Component {
     } = this.state;
 
     if (isLoading){
-      return (<h4>Ingresando al sistema</h4>);
+      return (<h1>Loading...</h1>);
     }
     if (!token){
       return (
-       <div align="center">
-        <div style={{ width: 350, height: 'auto', align:'center'}}>
+        <div align="center">
+          <div style={{ width: 350, height: 'auto', align:'center'}}>
 
 
             {
@@ -274,17 +270,17 @@ class Home extends Component {
 
             <br/>
             <br/>
-          <img src={require('../Header/fodec.png')} />
+            <img src={require('../Header/fodec.png')} />
             <Form horizontal>
               <FormGroup controlId="formHorizontalEmail">
                 <Col componentClass={ControlLabel} sm={2}>
-                  Usuario GzU0Nj83MzI6MTc2Pjc0NDs1Nz01Mjs5NzY4Ng==
+                  Usuario
                 </Col>
                 <Col sm={50}>
-                        <FormControl type="text"
-                                     placeholder="User"
-                                     value={signInUser}
-                                     onChange={this.onTextboxChangeSignInUser}/>
+                  <FormControl type="text"
+                               placeholder="User"
+                               value={signInUser}
+                               onChange={this.onTextboxChangeSignInUser}/>
                 </Col>
               </FormGroup>
 
@@ -293,29 +289,49 @@ class Home extends Component {
                   Contraseña
                 </Col>
                 <Col sm={50}>
-                        <FormControl type="password"
-                                     placeholder="Password"
-                                     value={signInPassword}
-                                     onChange={this.onTextboxChangeSignInPassword} />
+                  <FormControl type="password"
+                               placeholder="Password"
+                               value={signInPassword}
+                               onChange={this.onTextboxChangeSignInPassword} />
                 </Col>
               </FormGroup>
 
               <div align="right">
-              <FormGroup>
-                <Col smOffset={2} sm={10}>
-                  <Button type="submit" bsStyle="success" onClick={this.onSignIn}>Ingresar</Button>
-                </Col>
-              </FormGroup>
+                <FormGroup>
+                  <Col smOffset={2} sm={10}>
+                    <Button type="submit" bsStyle="success" onClick={this.onSignIn}>Ingresar</Button>
+                  </Col>
+                </FormGroup>
               </div>
             </Form>
 
-          <br/>
-          <br/>
+            <br/>
+            <br/>
+
+            <div>
+              {
+                (signUpError) ? (
+                  <p>{signUpError}</p>
+                ) : (null)
+              }
+              <p>Sign Up</p>
+              <input
+                type="text"
+                placeholder="User"
+                value={signUpUser}
+                onChange={this.onTextboxChangeSignUpUser}
+              /><br />
+              <input
+                type="password"
+                placeholder="Password"
+                value={signUpPassword}
+                onChange={this.onTextboxChangeSignUpPassword}
+              /><br />
+              <button onClick={this.onSignUp}>Sign Up</button>
+            </div>
 
 
-
-
-        </div>
+          </div>
         </div>)
     }
     return (
@@ -329,4 +345,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default GestionCuentas;

@@ -3,6 +3,7 @@ import ReactTable from 'react-table';
 import Converter from '../Converter/Converter';
 import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
 import ModalTest from '../ModalTest/ModalTest'
+import Header from "../Header/Header";
 
 class Dashboard extends Component {
 
@@ -127,18 +128,18 @@ class Dashboard extends Component {
 
 
     return (
+
       <div>
-        <ButtonToolbar>
-          <ModalTest />
-        </ButtonToolbar>
-
-          <Converter/>
-          <ReactTable
-            data={data}//{data}
-            columns={columns}
-            filterable
-          />
-
+          <ButtonToolbar>
+             <ModalTest />
+               </ButtonToolbar>
+                 <br/>
+                    <Converter/>
+                        <ReactTable
+                        data={data}//{data}
+                        columns={columns}
+                        filterable
+                        />
       </div>
     );
   }

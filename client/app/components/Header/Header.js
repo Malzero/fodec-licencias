@@ -17,7 +17,7 @@ const Header = () => (
     <Navbar.Header>
       <Navbar.Brand>
 
-        <a href="#brand" >Control de Licencias FODEC</a>
+        <a>Control de Licencias FODEC</a>
 
       </Navbar.Brand>
       <Navbar.Toggle />

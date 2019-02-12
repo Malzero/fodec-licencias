@@ -1,9 +1,10 @@
 import React from 'react';
-var estaLogueado=0;
+var estaLogueado=1;
 import Redirect from "react-router/es/Redirect";
+import Header from "../Header/Header";
 const verificarRuta = (Component) => {
   return (estaLogueado)
-    ? <Component/>
+    ? <div><Header/><Component/></div>
     : <Redirect to="/"/>
 };
 

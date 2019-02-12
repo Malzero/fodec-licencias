@@ -10,12 +10,14 @@ import {
 
 import App from './components/App/App';
 import NotFound from './components/App/NotFound';
-
+import GestionCuentas from './components/GestionCuentas/GestionCuentas'
 import Home from './components/Home/Home';
-
-import Dashboard from "./components/Dashboard/Dashboard"
-
+import verificarRuta from './components/verificarRuta/verificarRuta'
+import Dashboard from './components/Dashboard/Dashboard'
+import VistaDirector from './components/VistaDirector/VistaDirector'
 import HelloWorld from './components/HelloWorld/HelloWorld';
+
+import Graficos from './components/Graficos/Graficos';
 
 import './styles/styles.scss';
 import 'filepond/dist/filepond.min.css';
@@ -25,8 +27,11 @@ render((
     <App>
       <Switch>
         <Route exact path="/" component={Home}/>
-        <Route path="/dashboard" component={Dashboard}/>
-        <Route path="/helloworld" component={HelloWorld}/>
+        <Route path="/dashboard" render={() => verificarRuta(Dashboard)}/>
+        <Route path="/certificados" render={() => verificarRuta(VistaDirector)}/>
+        <Route path="/gestioncuentas" render={() => verificarRuta(GestionCuentas)}/>
+        <Route path="/helloworld" render={() => verificarRuta(HelloWorld)}/>
+        <Route path="/graficos" render={() => verificarRuta(Graficos)}/>
         <Route component={NotFound}/>
       </Switch>
     </App>
