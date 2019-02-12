@@ -28,7 +28,7 @@ const Header = () => (
         <NavItem eventKey={1} href="#">
           Generar Reporte
         </NavItem>
-        <NavItem eventKey={2} href="#">
+        <NavItem eventKey={2} href="/graficos">
           Generar gráfico
         </NavItem>
       </Nav>
