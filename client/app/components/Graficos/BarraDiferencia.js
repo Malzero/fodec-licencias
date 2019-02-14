@@ -5,7 +5,7 @@ import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
 import ModalTest from '../ModalTest/ModalTest'
 
 
-import { Legend, Bar,BarChart,LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { Legend, Bar,BarChart,CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 import Footer from "../Footer/Footer";
 
