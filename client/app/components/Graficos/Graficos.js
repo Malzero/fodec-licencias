@@ -5,7 +5,7 @@ import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
 import ModalTest from '../ModalTest/ModalTest'
 
 
-import {BarChart} from 'react-easy-chart';
+//import {BarChart} from 'react-easy-chart';
 import BarraDiferencia from "./BarraDiferencia";
 
 

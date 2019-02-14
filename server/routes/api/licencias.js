@@ -47,7 +47,6 @@ module.exports = (app) => {
         let i = 0;
         licencias.forEach(function (licencia) {
           licenciasMap[i] = licencia;
-          console.log(licencia);
           i++;
         });
         return res.send(licenciasMap);

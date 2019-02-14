@@ -5,6 +5,8 @@ import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
 import ModalTest from '../ModalTest/ModalTest'
 import Header from "../Header/Header";
 
+
+
 class Dashboard extends Component {
 
   constructor() {
@@ -119,16 +121,16 @@ class Dashboard extends Component {
     return (
 
       <div>
-          <ButtonToolbar>
-             <ModalTest />
-               </ButtonToolbar>
-                 <br/>
-                    <Converter/>
-                        <ReactTable
-                        data={data}//{data}
-                        columns={columns}
-                        filterable
-                        />
+        <ButtonToolbar>
+          <ModalTest />
+        </ButtonToolbar>
+        <br/>
+        <Converter/>
+        <ReactTable
+          data={data}//{data}
+          columns={columns}
+          filterable
+        />
       </div>
     );
   }
