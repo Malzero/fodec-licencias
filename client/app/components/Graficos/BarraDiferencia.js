@@ -1,14 +1,7 @@
 import React, {Component} from 'react';
-import ReactTable from 'react-table';
-import Converter from '../Converter/Converter';
-
-
 import { Legend, Bar,BarChart,CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 import Footer from "../Footer/Footer";
-
-
-
 
 class BarraDiferencia extends Component {
 
@@ -34,14 +27,6 @@ class BarraDiferencia extends Component {
       .catch(error => console.log("parsing fail", error))
   }
 
-
-
-
-
-
-
-
-
   renderEditable(cellInfo) {
 
     return (
@@ -62,22 +47,13 @@ class BarraDiferencia extends Component {
   }
 
   render() {
-    let temp = [];
 
-    //console.log(JSON.parse(JSON.stringify(this.state.licencias))[0]);
-    temp.push(JSON.parse(JSON.stringify(this.state.licencias))[0]);
-    temp.push(JSON.parse(JSON.stringify(this.state.licencias))[1]);
-    if (this.state.licencias.length > 1){
-      console.log(this.state.licencias);
-    }
-
-    // this.state.data.push(this.state.licencias[0]);
-    //temp.push(JSON.parse(JSON.stringify(this.state.licencias[1]))) ;
-    //console.log(temp);
     const data = this.state.licencias;
 
-
-console.log(data[0]);
+    //SACAR DATOS DE LICENCIA
+data.forEach(function (licencia) {//Por cada elemento en data, desde ahora licencia
+  console.log(licencia.perdida);//Imprimo la propiedad perdida de licencia
+});
 
 
     const data2 = [
@@ -125,12 +101,10 @@ console.log(data[0]);
       }
     ];
 
-
     return (
 
       <div align="center">
         <h4>Devolución isapres vs pago FODEC</h4>
-
         <BarChart width={730} height={250} data={data2}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
@@ -141,13 +115,11 @@ console.log(data[0]);
           <Bar dataKey="Pérdida FODEC" fill="#82ca9d" />
         </BarChart>
 
-
         <br/>
 
       <Footer/>
       </div>
     );
   }
-
 }
 export default BarraDiferencia;
