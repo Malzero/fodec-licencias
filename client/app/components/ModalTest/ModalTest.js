@@ -13,7 +13,8 @@ class ModalTest extends React.Component {
 
     this.state = {
       show: false,
-      files: []
+      files: [],
+      files2: []
     };
   }
 
@@ -47,7 +48,7 @@ class ModalTest extends React.Component {
           <FilePond
            // ref={ref => this.pond = ref}
             files={this.state.files}
-            server="http://localhost:8080/api/admin/licencias/upload"
+            server="http://localhost:8080/api/admin/licencias/upload1"
             oninit={() => this.handleInit() }
             onupdatefiles={fileItems => {
               // Set currently active file objects to this.state
@@ -63,7 +64,18 @@ class ModalTest extends React.Component {
             <p>
               Subir Archivo SOFTLAND 2
             </p>
-            <FilePond/>
+            <FilePond
+              // ref={ref => this.pond = ref}
+              files={this.state.files2}
+              server="http://localhost:8080/api/admin/licencias/upload2"
+              oninit={() => this.handleInit() }
+              onupdatefiles={fileItems => {
+                // Set currently active file objects to this.state
+                this.setState({
+                  files2: fileItems.map(fileItem => fileItem.file)
+                });
+              }}>
+            </FilePond>
 
           </Modal.Body>
           <Modal.Footer>

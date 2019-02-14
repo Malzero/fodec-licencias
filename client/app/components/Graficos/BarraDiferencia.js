@@ -49,13 +49,6 @@ class BarraDiferencia extends Component {
   render() {
 
     const data = this.state.licencias;
-
-    //SACAR DATOS DE LICENCIA
-data.forEach(function (licencia) {//Por cada elemento en data, desde ahora licencia
-  console.log(licencia.perdida);//Imprimo la propiedad perdida de licencia
-});
-
-
     const data2 = [
       {
         "name": "Cruz Blanca",
@@ -100,6 +93,15 @@ data.forEach(function (licencia) {//Por cada elemento en data, desde ahora licen
         "amt": 2100
       }
     ];
+
+
+    //SACAR DATOS DE LICENCIA
+data.forEach(function (licencia) {//Por cada elemento en data, desde ahora licencia
+
+  console.log(licencia.perdida);//Imprimo la propiedad perdida de licencia
+});
+
+
 
     return (
 

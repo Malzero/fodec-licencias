@@ -26,8 +26,6 @@ function upLicencia(converted) {
 
 module.exports = (app) => {
 
-
-
   app.get('/api/admin/licencias/get', (req, res) => {
 
     Licencia.find({}, (err, licencias) => {
@@ -202,18 +200,115 @@ module.exports = (app) => {
     });
     return res.json(temp);
   });
-
-  app.post('/api/admin/licencias/upload', (req, res) => {
-
-
-
-    let form = new multiparty.Form({ uploadDir: './server/uploads/files/softland1' });
-
-
+  app.post('/api/admin/licencias/upload1', (req, res) => {
+    let form = new multiparty.Form({ uploadDir: './server/uploads/files/softland1/' });
+    let filename;
+    let extension;
+    let temp;
+    let dir = './server/uploads/files/softland1/';
     form.parse(req, function(err, fields, files) {
-      console.log(JSON.parse(JSON.stringify(files['filepond'])).path);
-      Object.keys(files).forEach(function(name) {
-        console.log(name);
+      files['filepond'].forEach(function (file) {//Por cada elemento en data, desde ahora licencia
+
+        console.log(file.path);//Imprimo la propiedad perdida de licencia
+        temp = file.path.split('\\')[4];
+        filename = temp.split('.')[0];
+        extension = temp.split('.')[1];
+        fs.rename( dir + filename + '.' + extension,dir + "Softland1." + extension, function (err) {
+          if (err)
+          {
+            //console.log('rename callback', err);
+          }
+          else {
+            console.log('rename good');
+          }
+          if (extension === 'xls' && fs.existsSync(dir + "Softland1." + 'xlsx'))
+          {
+            fs.unlink(dir + "Softland1." + 'xlsx', function (err) {
+
+              if (err)
+              {
+                console.log('Problema al borrar el archivo')
+              }
+              else {
+                console.log('Borrado con exito softland1.xlsx')
+              }
+
+            });
+          }
+          if (extension === 'xlsx' && fs.existsSync(dir + "Softland1." + 'xls'))
+          {
+            fs.unlink(dir + "Softland1." + 'xls', function (err) {
+
+              if (err)
+              {
+                console.log('Problema al borrar el archivo')
+              }
+              else {
+                console.log('Borrado con exito softland1.xls')
+              }
+
+            });
+          }
+        });
+      });
+
+      res.writeHead(200, {'content-type': 'text/plain'});
+      res.write('received upload:\n\n');
+      res.end(util.inspect({fields: fields, files: files}));
+    });
+
+
+  });
+  app.post('/api/admin/licencias/upload2', (req, res) => {
+    let form = new multiparty.Form({ uploadDir: './server/uploads/files/softland2/' });
+    let filename;
+    let extension;
+    let temp;
+    let dir = './server/uploads/files/softland2/';
+    form.parse(req, function(err, fields, files) {
+      files['filepond'].forEach(function (file) {//Por cada elemento en data, desde ahora licencia
+
+        console.log(file.path);//Imprimo la propiedad perdida de licencia
+        temp = file.path.split('\\')[4];
+        filename = temp.split('.')[0];
+        extension = temp.split('.')[1];
+        fs.rename( dir + filename + '.' + extension,dir + "Softland2." + extension, function (err) {
+          if (err)
+          {
+            //console.log('rename callback', err);
+          }
+          else {
+            console.log('rename good');
+          }
+          if (extension === 'xls' && fs.existsSync(dir + "Softland2." + 'xlsx'))
+          {
+            fs.unlink(dir + "Softland2." + 'xlsx', function (err) {
+
+              if (err)
+              {
+                console.log('Problema al borrar el archivo')
+              }
+              else {
+                console.log('Borrado con exito softland2.xlsx')
+              }
+
+            });
+          }
+          if (extension === 'xlsx' && fs.existsSync(dir + "Softland2." + 'xls'))
+          {
+            fs.unlink(dir + "Softland2." + 'xls', function (err) {
+
+              if (err)
+              {
+                console.log('Problema al borrar el archivo')
+              }
+              else {
+                console.log('Borrado con exito softland2.xls')
+              }
+
+            });
+          }
+        });
       });
 
       res.writeHead(200, {'content-type': 'text/plain'});
