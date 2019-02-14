@@ -20,6 +20,7 @@ class ModalTest extends React.Component {
 
   handleClose() {
     this.setState({ show: false });
+    window.location.reload();
   }
   handleInit() {
     console.log('FilePond instance has initialised', this.pond);
@@ -33,17 +34,17 @@ class ModalTest extends React.Component {
     return (
       <>
         <Button variant="primary" onClick={this.handleShow}>
-          Launch demo modal
+          Importar Archivos Softland
         </Button>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Subir archivos Softland</Modal.Title>
           </Modal.Header>
           <Modal.Body>
 
           <p>
-            Subir Archivo SOFTLAND 1
+            Archivo SOFTLAND 1
           </p>
           <FilePond
            // ref={ref => this.pond = ref}
@@ -62,11 +63,12 @@ class ModalTest extends React.Component {
           <Modal.Body>
 
             <p>
-              Subir Archivo SOFTLAND 2
+              Archivo SOFTLAND 2
             </p>
             <FilePond
               // ref={ref => this.pond = ref}
               files={this.state.files2}
+              labelIdle="Arrastre y suelte el archivo Softland aca o busque desde el explorador haciendo <span> Click </span>"
               server="http://localhost:8080/api/admin/licencias/upload2"
               oninit={() => this.handleInit() }
               onupdatefiles={fileItems => {
@@ -81,9 +83,6 @@ class ModalTest extends React.Component {
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleClose}>
               Close
-            </Button>
-            <Button variant="primary" onClick={this.handleClose}>
-              Save Changes
             </Button>
           </Modal.Footer>
         </Modal>

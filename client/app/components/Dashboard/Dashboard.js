@@ -54,6 +54,7 @@ class Dashboard extends Component {
 
     const data = this.state.licencias;
 
+
     const columns =
       [{
       Header: 'id_licencia',
@@ -122,12 +123,11 @@ class Dashboard extends Component {
 
       <div>
         <ButtonToolbar>
-          <ModalTest />
+          <ModalTest  />
         </ButtonToolbar>
         <br/>
-        <Converter/>
         <ReactTable
-          data={data}//{data}
+          data={this.state.licencias}//{data}
           columns={columns}
           filterable
         />

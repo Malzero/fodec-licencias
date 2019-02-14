@@ -11,8 +11,7 @@ function upLicencia(converted) {
 
   //sacar state
   //post request al backend
-  console.log('muestro converted');
-  //console.log(converted);
+
   fetch('http://localhost:8080/api/admin/licencias/post', {
     method: 'post',
     body: JSON.stringify(converted),
@@ -21,7 +20,17 @@ function upLicencia(converted) {
     .then(res => res.json())
     .then(json => console.log(json))
     .catch(err => console.error(err));
+}
+function upConvert() {
 
+  //sacar state
+  //post request al backend
+  fetch('http://localhost:8080/api/admin/licencias/convert', {
+    method: 'get',
+  })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
 }
 
 module.exports = (app) => {
@@ -30,6 +39,11 @@ module.exports = (app) => {
 
     Licencia.find({}, (err, licencias) => {
       let licenciasMap = [];
+
+      if (licencias.length === 0) {
+        console.log(licencias.length);
+        return res.send(licenciasMap);
+      }
       if(err){
         return res.send({
           success: false,
@@ -41,12 +55,14 @@ module.exports = (app) => {
           success: false,
           message: 'Error, invalido'
         });
-      } else {
+      }
+ else {
         let i = 0;
         licencias.forEach(function (licencia) {
           licenciasMap[i] = licencia;
           i++;
         });
+        console.log(licenciasMap);
         return res.send(licenciasMap);
       }
     });
@@ -157,7 +173,26 @@ module.exports = (app) => {
 
 
     //console.log("entre a la api convert");
-    let src = './test.xls';
+    let dir_xls = './server/uploads/files/softland1/Softland1.xls';
+    let dir_xlsx = './server/uploads/files/softland1/Softland1.xlsx';
+
+    let src;
+
+    if (fs.existsSync(dir_xls))
+    {
+      src = dir_xls;
+    }
+    else if (fs.existsSync(dir_xlsx))
+    {
+      src = dir_xlsx;
+    }
+    else{
+      return res.send({
+        success: false,
+        message: 'Error, no existe archivo para convertir'
+      })
+    }
+
     let dst = [];
     let result = [];
     result = convertExcel.readFile(src, {type:'buffer'});
@@ -250,6 +285,7 @@ module.exports = (app) => {
             });
           }
         });
+        upConvert();
       });
 
       res.writeHead(200, {'content-type': 'text/plain'});
@@ -318,10 +354,5 @@ module.exports = (app) => {
 
 
   });
-
-
-
-
-
 
 };
