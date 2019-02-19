@@ -1,4 +1,5 @@
 const Licencia = require('../../models/Licencias');
+const Resumen = require('../../models/Resumen');
 let convertExcel = require('js-xlsx');
 const fetch = require('node-fetch');
 let fs = require('fs');
@@ -21,11 +22,38 @@ function upLicencia(converted) {
     .then(json => console.log(json))
     .catch(err => console.error(err));
 }
+
+function upResumen(converted) {
+
+  //sacar state
+  //post request al backend
+
+  fetch('http://localhost:8080/api/admin/licencias/post2', {
+    method: 'post',
+    body: JSON.stringify(converted),
+    headers: {'Content-Type' : 'application/json'},
+  })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
+}
+
 function upConvert() {
 
   //sacar state
   //post request al backend
   fetch('http://localhost:8080/api/admin/licencias/convert', {
+    method: 'get',
+  })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
+}
+function upConvert2() {
+
+  //sacar state
+  //post request al backend
+  fetch('http://localhost:8080/api/admin/licencias/convert2', {
     method: 'get',
   })
     .then(res => res.json())
@@ -164,6 +192,101 @@ module.exports = (app) => {
     });
 
   });
+  app.post('/api/admin/licencias/post2', (req, res) => {
+    const {body} = req;
+    const {
+      colegio,
+      rut,
+      nombre,
+      dias_pago,
+      dias_total,
+      mes_pago,
+      ano_pago,
+      sis_salud,
+      pago_fodec,
+      recuperado,
+      perdida
+    } = body;
+
+    if (!rut){
+      return res.send({
+        success: false,
+        message: 'Error, rut no puede estar en vacío'
+      })
+    }
+    if (!nombre){
+      return res.send({
+        success: false,
+        message: 'Error, nombre no puede estar en vacío'
+      })
+    }
+
+    let ver = 0;
+    //Verifico que np exista la misma licencia
+    //Licencia repetida: mismo rut, mes_pago y ano_pago
+    Resumen.find({
+      rut: rut
+    }, (err, previousResumen) => {
+      if (err){
+        return res.send('Error: Server error rut');
+      } else if (previousResumen.length > 0) {
+        //SI encuentra una licencia con el mismo rut pasa a la siguiente verificación
+        Resumen.find({
+          mes_pago: mes_pago
+
+        }, (err, previousPreviousResumen) => {
+            if (err) {
+              return res.send('Error: Server error mes_pago');
+            } else if (previousPreviousResumen.length > 0) {
+              //Si encuentra una licencia con el mismo mes paso a la otra verificación
+              Resumen.find({
+                  ano_pago: ano_pago
+
+                }, (err, previousPreviousPreviousResumen) => {
+                  if (err) {
+                    return res.send('Error: Server error ano_pago');
+                  } else if (previousPreviousPreviousResumen.length > 0) {
+                    //SI encuentra una licencia con el mismo año retorno licencia ya existente
+                    return res.send('Error: la licencia ya existe');
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+
+      const newResumen = new Resumen();
+      newResumen.rut = rut;
+      newResumen.nombre = nombre;
+      newResumen.dias_pago = dias_pago;
+      newResumen.dias_total = dias_total;
+      newResumen.mes_pago = mes_pago;
+      newResumen.ano_pago = ano_pago;
+      newResumen.sis_salud = sis_salud;
+      newResumen.pago_fodec = pago_fodec;
+      newResumen.save((err, resumen) => {
+        if(err){
+          return res.send({
+            success: false,
+            message: 'Error de servidor al subir'
+          });
+        }
+        if(!resumen)
+        {
+          return res.send({
+            success: false,
+            message: 'Licencia no existe'
+          })
+        }
+        return res.send({
+          success: true,
+          message: 'Licencia ingresada'
+        })
+      })
+    });
+
+  });
   app.get('/api/admin/licencias/convert', (req, res) => {
     let options = [{
       sheet:'1',
@@ -203,7 +326,7 @@ module.exports = (app) => {
     let col=result[3][0].split(": ")[1];
 
     result.forEach(function(element){
-      if(element.length > 0)
+      if(element.length > 0 )
         //get colegio
         if(element.length === 11){
           let resp = {
@@ -231,6 +354,97 @@ module.exports = (app) => {
           resp.fecha_termino= element[7];
           temp.push(resp);
           upLicencia(resp);
+        }
+    });
+    return res.json(temp);
+  });
+  app.get('/api/admin/licencias/convert2', (req, res) => {
+    let options = [{
+      sheet:'1',
+      isColOriented: false,
+      omitEmtpyFields: false,
+    }];
+
+
+    //console.log("entre a la api convert");
+    let dir_xls = './server/uploads/files/softland2/Softland2.xls';
+    let dir_xlsx = './server/uploads/files/softland2/Softland2.xlsx';
+
+    let src;
+
+    if (fs.existsSync(dir_xls))
+    {
+      src = dir_xls;
+    }
+    else if (fs.existsSync(dir_xlsx))
+    {
+      src = dir_xlsx;
+    }
+    else{
+      return res.send({
+        success: false,
+        message: 'Error, no existe archivo para convertir'
+      })
+    }
+
+    let dst = [];
+    let result = [];
+    result = convertExcel.readFile(src, {type:'buffer'});
+    let sheet = result.SheetNames[0];
+    sheet = result.Sheets[sheet];
+    result = convertExcel.utils.sheet_to_json(sheet,{header:1});
+
+
+    let temp=[];
+    let fecha =result[1][0].split(": ")[1];
+    let mes = fecha.split(' ')[0];
+    let ano = fecha.split(' ')[1];
+
+    result.forEach(function(element){
+      if(element.length > 0 )
+
+        if(element.length === 12){
+          let resp = {
+            colegio: '',
+            rut: '',
+            nombre: '',
+            dias_pago: 0,
+            dias_total: 0,
+            mes_pago: '',
+            ano_pago: '',
+            sis_salud: '',
+            pago_fodec: 0,
+            recuperado: 0,
+            perdida: 0,
+          } ;
+
+          if (element[3] !== '0')
+          {
+            console.log('entré');
+            //resp.colegio = col;
+            resp.rut = element[1];
+            resp.nombre= element[2];
+            resp.dias_total= element[3];
+            resp.mes_pago= mes.toUpperCase();
+            resp.ano_pago= ano;
+            if (element[7] === ' '){
+              resp.sis_salud= 'Fonasa';
+            }
+            else{
+              resp.sis_salud= element[7];
+            }
+            resp.dias_pago= element[9];
+
+            if (element[10] === '0'){
+              resp.pago_fodec= element[11];
+            }
+            else{
+              resp.pago_fodec= element[10];
+            }
+            temp.push(resp);
+           // return res.json(temp);
+            upResumen(resp);
+          }
         }
     });
     return res.json(temp);
@@ -345,6 +559,7 @@ module.exports = (app) => {
             });
           }
         });
+        upConvert2();
       });
 
       res.writeHead(200, {'content-type': 'text/plain'});

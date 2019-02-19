@@ -84,35 +84,6 @@ class Dashboard extends Component {
         Header: 'fecha termino',
         accessor: 'fecha_termino' // String-based value accessors!
       },
-      {
-        Header: 'dias pago',
-        accessor: 'dias_pago' // String-based value accessors!
-      },
-      {
-        Header: 'mes pago',
-        accessor: 'mes_pago' // String-based value accessors!
-      },
-      {
-        Header: 'sis salud',
-        accessor: 'sis_salud' // String-based value accessors!
-      },
-      {
-        Header: 'pago fodec',
-        accessor: 'pago_fodec' // String-based value accessors!
-      },
-      {
-        Header: 'estado',
-        accessor: 'estado', // String-based value accessors!
-        //Cell: this.renderEditable
-      },
-      {
-        Header: 'recuperado',
-        accessor: 'recuperado' // String-based value accessors!
-      },
-      {
-        Header: 'perdida',
-        accessor: 'perdida' // String-based value accessors!
-      },
         {
           Header: 'Opciones',
         },

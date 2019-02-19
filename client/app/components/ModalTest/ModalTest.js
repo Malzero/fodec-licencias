@@ -44,11 +44,12 @@ class ModalTest extends React.Component {
           <Modal.Body>
 
           <p>
-            Archivo SOFTLAND 1
+            Licencias
           </p>
           <FilePond
            // ref={ref => this.pond = ref}
             files={this.state.files}
+            labelIdle="Arrastre y suelte el archivo Excel aca o busque desde el explorador haciendo <span> Click </span>"
             server="http://localhost:8080/api/admin/licencias/upload1"
             oninit={() => this.handleInit() }
             onupdatefiles={fileItems => {
@@ -63,12 +64,12 @@ class ModalTest extends React.Component {
           <Modal.Body>
 
             <p>
-              Archivo SOFTLAND 2
+              Resumen licencias por mes
             </p>
             <FilePond
               // ref={ref => this.pond = ref}
               files={this.state.files2}
-              labelIdle="Arrastre y suelte el archivo Softland aca o busque desde el explorador haciendo <span> Click </span>"
+              labelIdle="Arrastre y suelte el archivo Excel aca o busque desde el explorador haciendo <span> Click </span>"
               server="http://localhost:8080/api/admin/licencias/upload2"
               oninit={() => this.handleInit() }
               onupdatefiles={fileItems => {
