@@ -90,7 +90,7 @@ module.exports = (app) => {
           licenciasMap[i] = licencia;
           i++;
         });
-        console.log(licenciasMap);
+
         return res.send(licenciasMap);
       }
     });
@@ -195,7 +195,6 @@ module.exports = (app) => {
   app.post('/api/admin/licencias/post2', (req, res) => {
     const {body} = req;
     const {
-      colegio,
       rut,
       nombre,
       dias_pago,
@@ -205,7 +204,7 @@ module.exports = (app) => {
       sis_salud,
       pago_fodec,
       recuperado,
-      perdida
+      perdida,
     } = body;
 
     if (!rut){
@@ -226,65 +225,155 @@ module.exports = (app) => {
     //Licencia repetida: mismo rut, mes_pago y ano_pago
     Resumen.find({
       rut: rut
+
     }, (err, previousResumen) => {
+
       if (err){
-        return res.send('Error: Server error rut');
+        return res.send({
+          success: false,
+          message: 'Error en el servidor'
+        })
       } else if (previousResumen.length > 0) {
+        console.log("encontre un rut igual");
         //SI encuentra una licencia con el mismo rut pasa a la siguiente verificación
         Resumen.find({
           mes_pago: mes_pago
 
         }, (err, previousPreviousResumen) => {
             if (err) {
-              return res.send('Error: Server error mes_pago');
+              return res.send({
+                success: false,
+                message: 'Error en el servidor'
+              })
             } else if (previousPreviousResumen.length > 0) {
+              console.log("encontre un mes_pago igual");
               //Si encuentra una licencia con el mismo mes paso a la otra verificación
               Resumen.find({
                   ano_pago: ano_pago
 
                 }, (err, previousPreviousPreviousResumen) => {
                   if (err) {
-                    return res.send('Error: Server error ano_pago');
+                    console.log(err);
+                    return res.send({
+                      success: false,
+                      message: 'Error en el servidor'
+                    })
+
                   } else if (previousPreviousPreviousResumen.length > 0) {
+                    console.log("encontre un ano_pago igual");
                     //SI encuentra una licencia con el mismo año retorno licencia ya existente
-                    return res.send('Error: la licencia ya existe');
+
+                    console.log('Licencia no ingresada  por existir en base de datos');
+                  }
+                  else {
+                      const newResumen = new Resumen();
+                      newResumen.rut = rut;
+                      newResumen.nombre = nombre;
+                      newResumen.dias_pago = Number(dias_pago);
+                      newResumen.dias_total = Number(dias_total);
+                      newResumen.mes_pago = mes_pago;
+                      newResumen.ano_pago = ano_pago;
+                      newResumen.sis_salud = sis_salud;
+                      newResumen.pago_fodec = Number(pago_fodec);
+                      newResumen.recuperado = Number(recuperado);
+                      newResumen.perdida = Number(perdida);
+                      newResumen.save((err, resumen) => {
+                        if(err){
+                          console.log(err);
+                          return res.send({
+                            success: false,
+                            message: 'Error de servidor al subir'
+                          });
+                        }
+                        if(!resumen)
+                        {
+                          return res.send({
+                            success: false,
+                            message: 'Licencia no existe'
+                          })
+                        }
+                        return res.send({
+                          success: true,
+                          message: 'Licencia ingresada'
+                        })
+                      });
                   }
                 }
               );
             }
+            else {
+              const newResumen = new Resumen();
+              newResumen.rut = rut;
+              newResumen.nombre = nombre;
+              newResumen.dias_pago = Number(dias_pago);
+              newResumen.dias_total = Number(dias_total);
+              newResumen.mes_pago = mes_pago;
+              newResumen.ano_pago = ano_pago;
+              newResumen.sis_salud = sis_salud;
+              newResumen.pago_fodec = Number(pago_fodec);
+              newResumen.recuperado = Number(recuperado);
+              newResumen.perdida = Number(perdida);
+              newResumen.save((err, resumen) => {
+                if(err){
+                  console.log(err);
+                  return res.send({
+                    success: false,
+                    message: 'Error de servidor al subir'
+                  });
+                }
+                if(!resumen)
+                {
+                  return res.send({
+                    success: false,
+                    message: 'Licencia no existe'
+                  })
+                }
+                return res.send({
+                  success: true,
+                  message: 'Licencia ingresada'
+                })
+              });
+            }
           }
         );
       }
-
-      const newResumen = new Resumen();
-      newResumen.rut = rut;
-      newResumen.nombre = nombre;
-      newResumen.dias_pago = dias_pago;
-      newResumen.dias_total = dias_total;
-      newResumen.mes_pago = mes_pago;
-      newResumen.ano_pago = ano_pago;
-      newResumen.sis_salud = sis_salud;
-      newResumen.pago_fodec = pago_fodec;
-      newResumen.save((err, resumen) => {
-        if(err){
+      else {
+        const newResumen = new Resumen();
+        newResumen.rut = rut;
+        newResumen.nombre = nombre;
+        newResumen.dias_pago = Number(dias_pago);
+        newResumen.dias_total = Number(dias_total);
+        newResumen.mes_pago = mes_pago;
+        newResumen.ano_pago = ano_pago;
+        newResumen.sis_salud = sis_salud;
+        newResumen.pago_fodec = Number(pago_fodec);
+        newResumen.recuperado = Number(recuperado);
+        newResumen.perdida = Number(perdida);
+        newResumen.save((err, resumen) => {
+          if(err){
+            console.log(err);
+            return res.send({
+              success: false,
+              message: 'Error de servidor al subir'
+            });
+          }
+          if(!resumen)
+          {
+            return res.send({
+              success: false,
+              message: 'Licencia no existe'
+            })
+          }
           return res.send({
-            success: false,
-            message: 'Error de servidor al subir'
-          });
-        }
-        if(!resumen)
-        {
-          return res.send({
-            success: false,
-            message: 'Licencia no existe'
+            success: true,
+            message: 'Licencia ingresada'
           })
-        }
-        return res.send({
-          success: true,
-          message: 'Licencia ingresada'
-        })
-      })
+        });
+      }
+
     });
+
+
 
   });
   app.get('/api/admin/licencias/convert', (req, res) => {
@@ -400,9 +489,12 @@ module.exports = (app) => {
     let mes = fecha.split(' ')[0];
     let ano = fecha.split(' ')[1];
 
-    result.forEach(function(element){
-      if(element.length > 0 )
 
+    result.forEach(function(element){
+
+      if(element.length > 0 && element[1] !== "RUT")
+
+        //console.log('entre');
         if(element.length === 12){
           let resp = {
             colegio: '',
@@ -418,13 +510,12 @@ module.exports = (app) => {
             perdida: 0,
           } ;
 
-          if (element[3] !== '0')
+          //console.log(Number(element[4]) === 0);
+          if (parseInt(element[4]) > 0)
           {
-            console.log('entré');
-            //resp.colegio = col;
             resp.rut = element[1];
             resp.nombre= element[2];
-            resp.dias_total= element[3];
+            resp.dias_total= Number(element[3]);
             resp.mes_pago= mes.toUpperCase();
             resp.ano_pago= ano;
             if (element[7] === ' '){
@@ -433,15 +524,16 @@ module.exports = (app) => {
             else{
               resp.sis_salud= element[7];
             }
-            resp.dias_pago= element[9];
+            resp.dias_pago= Number(element[9]);
 
             if (element[10] === '0'){
-              resp.pago_fodec= element[11];
+              resp.pago_fodec= Number(element[11]);
             }
             else{
-              resp.pago_fodec= element[10];
+              resp.pago_fodec= Number(element[10]);
             }
             temp.push(resp);
+            //console.log(resp);
            // return res.json(temp);
             upResumen(resp);
           }
