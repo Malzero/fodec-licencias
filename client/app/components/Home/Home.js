@@ -278,7 +278,7 @@ class Home extends Component {
             <Form horizontal>
               <FormGroup controlId="formHorizontalEmail">
                 <Col componentClass={ControlLabel} sm={2}>
-                  Usuario GzU0Nj83MzI6MTc2Pjc0NDs1Nz01Mjs5NzY4Ng==
+                  Usuario
                 </Col>
                 <Col sm={50}>
                         <FormControl type="text"

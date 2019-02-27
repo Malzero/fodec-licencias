@@ -3,9 +3,32 @@ const Resumen = require('../../models/Resumen');
 let convertExcel = require('js-xlsx');
 const fetch = require('node-fetch');
 let fs = require('fs');
-var util = require('util');
+let util = require('util');
 let multiparty = require('multiparty');
 
+const centCosto =
+    [{
+      7: 'LICEO SANTA TERESA',
+      6: 'COLEGIO SAGRADO CORAZON DE JESUS',
+      13: 'LICEO SAN JOSE',
+      12: 'LICEO JUAN XXIII-EL BELLOTO',
+      9: 'COLEGIO SAN PIO X',
+      11: 'LICEO JOSE CORTES BROWN-CERRO CASTILLO',
+      4: 'COLEGIO DE LA SANTA CRUZ',
+      15: 'COLEGIO TERESA DE LOS ANDES-ALGARROBO',
+      14: 'LICEO JUAN XXIII-VILLA ALEMANA',
+      3: 'COLEGIO SANTA FILOMENA',
+      8: 'COLEGIO HNO.EUGENIO EYRAUD',
+      2: 'LICEO SAN ISIDRO',
+      18: 'COLEGIO JUAN PABLO II',
+      10: 'COLEGIO SAN AGUSTIN',
+      17: 'ESCUELA EL AVE MARIA',
+      16: 'LICEO SANTA TERESA DE LOS ANDES-MIRAFLORES',
+      1: 'COLEGIO NIÑO JESUS DE PRAGA',
+      5: 'ESCUELA PURISIMA DE LO VASQUEZ',
+      19: 'LICEO JOSE CORTES BROWN-RECREO',
+      20: 'INSTANCIA CENTRAL',
+    }];
 
 
 function upLicencia(converted) {
@@ -13,7 +36,7 @@ function upLicencia(converted) {
   //sacar state
   //post request al backend
 
-  fetch('http://localhost:8080/api/admin/licencias/post', {
+  fetch('http://192.168.1.159:8080/api/admin/licencias/post', {
     method: 'post',
     body: JSON.stringify(converted),
     headers: {'Content-Type' : 'application/json'},
@@ -28,7 +51,7 @@ function upResumen(converted) {
   //sacar state
   //post request al backend
 
-  fetch('http://localhost:8080/api/admin/licencias/post2', {
+  fetch('http://192.168.1.159:8080/api/admin/licencias/post2', {
     method: 'post',
     body: JSON.stringify(converted),
     headers: {'Content-Type' : 'application/json'},
@@ -42,7 +65,7 @@ function upConvert() {
 
   //sacar state
   //post request al backend
-  fetch('http://localhost:8080/api/admin/licencias/convert', {
+  fetch('http://192.168.1.159:8080/api/admin/licencias/convert', {
     method: 'get',
   })
     .then(res => res.json())
@@ -53,7 +76,7 @@ function upConvert2() {
 
   //sacar state
   //post request al backend
-  fetch('http://localhost:8080/api/admin/licencias/convert2', {
+  fetch('http://192.168.1.159:8080/api/admin/licencias/convert2', {
     method: 'get',
   })
     .then(res => res.json())
@@ -231,6 +254,7 @@ module.exports = (app) => {
     const {
       rut,
       nombre,
+      colegio,
       dias_pago,
       dias_total,
       mes_pago,
@@ -287,7 +311,7 @@ module.exports = (app) => {
 
                 }, (err, previousPreviousPreviousResumen) => {
                   if (err) {
-                    console.log(err);
+                    //console.log(err);
                     return res.send({
                       success: false,
                       message: 'Error en el servidor'
@@ -302,6 +326,7 @@ module.exports = (app) => {
                   else {
                       const newResumen = new Resumen();
                       newResumen.rut = rut;
+                      newResumen.colegio = colegio;
                       newResumen.nombre = nombre;
                       newResumen.dias_pago = Number(dias_pago);
                       newResumen.dias_total = Number(dias_total);
@@ -313,7 +338,7 @@ module.exports = (app) => {
                       newResumen.perdida = Number(perdida);
                       newResumen.save((err, resumen) => {
                         if(err){
-                          console.log(err);
+                          //console.log(err);
                           return res.send({
                             success: false,
                             message: 'Error de servidor al subir'
@@ -339,6 +364,7 @@ module.exports = (app) => {
               const newResumen = new Resumen();
               newResumen.rut = rut;
               newResumen.nombre = nombre;
+              newResumen.colegio = colegio;
               newResumen.dias_pago = Number(dias_pago);
               newResumen.dias_total = Number(dias_total);
               newResumen.mes_pago = mes_pago;
@@ -349,7 +375,7 @@ module.exports = (app) => {
               newResumen.perdida = Number(perdida);
               newResumen.save((err, resumen) => {
                 if(err){
-                  console.log(err);
+                  //console.log(err);
                   return res.send({
                     success: false,
                     message: 'Error de servidor al subir'
@@ -375,6 +401,7 @@ module.exports = (app) => {
         const newResumen = new Resumen();
         newResumen.rut = rut;
         newResumen.nombre = nombre;
+        newResumen.colegio = colegio;
         newResumen.dias_pago = Number(dias_pago);
         newResumen.dias_total = Number(dias_total);
         newResumen.mes_pago = mes_pago;
@@ -385,7 +412,7 @@ module.exports = (app) => {
         newResumen.perdida = Number(perdida);
         newResumen.save((err, resumen) => {
           if(err){
-            console.log(err);
+            //console.log(err);
             return res.send({
               success: false,
               message: 'Error de servidor al subir'
@@ -409,7 +436,38 @@ module.exports = (app) => {
 
 
 
+
   });
+  app.get('/api/admin/licencias/update_per', (req, res) => {
+
+    Resumen.find({}, function (err, resumenes) {
+
+    if (err){
+      return res.send({
+        success: false,
+        message: 'Error'
+      })
+    }
+    else {
+      for (let i=0; i<resumenes.length; i++) {
+        Resumen.findOne({ rut: resumenes[i].rut }, function (err, doc){
+          if (doc.perdida === 0)
+          {
+            doc.perdida = doc.recuperado - doc.pago_fodec;
+            doc.save();
+          }
+
+        });
+      }
+      return res.send({
+        success: true,
+        message: 'Pérdida ingresadas '
+      })
+
+    }});
+  });
+
+
   app.get('/api/admin/licencias/convert', (req, res) => {
     let options = [{
       sheet:'1',
@@ -485,6 +543,7 @@ module.exports = (app) => {
     }];
 
 
+
     //console.log("entre a la api convert");
     let dir_xls = './server/uploads/files/softland2/Softland2.xls';
     let dir_xlsx = './server/uploads/files/softland2/Softland2.xlsx';
@@ -518,7 +577,9 @@ module.exports = (app) => {
     let fecha =result[1][0].split(": ")[1];
     let mes = fecha.split(' ')[0];
     let ano = fecha.split(' ')[1];
+    let col;
 
+    console.log(centCosto[0]['7']);
 
     result.forEach(function(element){
 
@@ -543,6 +604,17 @@ module.exports = (app) => {
           //console.log(Number(element[4]) === 0);
           if (parseInt(element[9]) > 0)
           {
+
+            if(element[0][0] === '0')
+            {
+              col = element[0][1];
+            }
+            else {
+              col = element[0][0] + element[0][1];
+            }
+
+            resp.colegio = centCosto[0][col];
+
             resp.rut = element[1];
             resp.nombre= element[2];
             resp.dias_total= Number(element[3]);

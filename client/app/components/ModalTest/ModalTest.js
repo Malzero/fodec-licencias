@@ -4,12 +4,15 @@ import Button from "react-bootstrap/es/Button";
 import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.css';
 
+
+
 class ModalTest extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.getUpdate = this.getUpdate.bind(this);
 
     this.state = {
       show: false,
@@ -18,8 +21,16 @@ class ModalTest extends React.Component {
     };
   }
 
+  getUpdate() {
+    fetch('/api/admin/licencias/update_per')
+      .then(results => results.json())
+      .catch(error => console.log("error update", error))
+  }
+
+
   handleClose() {
     this.setState({ show: false });
+    this.getUpdate();
     window.location.reload();
   }
   handleInit() {
@@ -29,6 +40,7 @@ class ModalTest extends React.Component {
   handleShow() {
     this.setState({ show: true });
   }
+
 
   render() {
     return (
@@ -50,7 +62,7 @@ class ModalTest extends React.Component {
            // ref={ref => this.pond = ref}
             files={this.state.files}
             labelIdle="Arrastre y suelte el archivo Excel aca o busque desde el explorador haciendo <span> Click </span>"
-            server="http://localhost:8080/api/admin/licencias/upload1"
+            server="http://192.168.1.159:8080/api/admin/licencias/upload1"
             oninit={() => this.handleInit() }
             onupdatefiles={fileItems => {
               // Set currently active file objects to this.state
@@ -70,7 +82,7 @@ class ModalTest extends React.Component {
               // ref={ref => this.pond = ref}
               files={this.state.files2}
               labelIdle="Arrastre y suelte el archivo Excel aca o busque desde el explorador haciendo <span> Click </span>"
-              server="http://localhost:8080/api/admin/licencias/upload2"
+              server="http://192.168.1.159:8080/api/admin/licencias/upload2"
               oninit={() => this.handleInit() }
               onupdatefiles={fileItems => {
                 // Set currently active file objects to this.state

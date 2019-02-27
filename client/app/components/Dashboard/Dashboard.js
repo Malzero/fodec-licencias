@@ -21,10 +21,12 @@ class Dashboard extends Component {
 
     this.getTabla2 = this.getTabla2.bind(this);
     this.renderEditable = this.renderEditable.bind(this);
+    this.getUpdate = this.getUpdate.bind(this);
   }
 
   componentDidMount() {
     this.getTabla2();
+    this.getUpdate();
   }
 
 
@@ -34,6 +36,13 @@ class Dashboard extends Component {
       .then(results => this.setState({resumenes: results}))
       .catch(error => console.log("parsing fail", error))
   }
+
+  getUpdate() {
+    fetch('/api/admin/licencias/update_per')
+      .then(results => results.json())
+      .catch(error => console.log("error update", error))
+  }
+
 
 
   renderEditable(cellInfo) {
@@ -120,6 +129,7 @@ class Dashboard extends Component {
         <br/>
         <ReactTable
           data={this.state.resumenes}//{data}
+          pageSize={this.state.resumenes.length}
           columns={columns}
           filterable
         />
