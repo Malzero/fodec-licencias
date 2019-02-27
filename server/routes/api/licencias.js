@@ -63,9 +63,11 @@ function upConvert2() {
 
 module.exports = (app) => {
 
-  app.get('/api/admin/licencias/get', (req, res) => {
+  app.post('/api/admin/licencias/get', (req, res) => {
 
-    Licencia.find({}, (err, licencias) => {
+    const rut = req.body.rut;
+
+    Licencia.find({rut:rut}, (err, licencias) => {
       let licenciasMap = [];
 
       if (licencias.length === 0) {
@@ -92,6 +94,38 @@ module.exports = (app) => {
         });
 
         return res.send(licenciasMap);
+      }
+    });
+  });
+  app.get('/api/admin/licencias/get2', (req, res) => {
+
+    Resumen.find({}, (err, resumenes) => {
+      let resumenMap = [];
+
+      if (resumenes.length === 0) {
+        console.log(resumenes.length);
+        return res.send(resumenMap);
+      }
+      if(err){
+        return res.send({
+          success: false,
+          message: 'Error del servidor'
+        });
+      }
+      if (resumenes.length < 1){
+        return res.send({
+          success: false,
+          message: 'Error, invalido'
+        });
+      }
+      else {
+        let i = 0;
+        resumenes.forEach(function (resumen) {
+          resumenMap[i] = resumen;
+          i++;
+        });
+
+        return res.send(resumenMap);
       }
     });
   });
@@ -407,17 +441,17 @@ module.exports = (app) => {
 
     let dst = [];
     let result = [];
-    result = convertExcel.readFile(src, {type:'buffer'});
+    result = convertExcel.readFile(src, {type:'buffer', cellDates:true, cellText:false});
     let sheet = result.SheetNames[0];
     sheet = result.Sheets[sheet];
-    result = convertExcel.utils.sheet_to_json(sheet,{header:1});
+    result = convertExcel.utils.sheet_to_json(sheet,{header:1, dateNF:"DD-MM-YYYY"});
     let temp=[];
-    let col=result[3][0].split(": ")[1];
+    let dateformated;
 
     result.forEach(function(element){
       if(element.length > 0 )
         //get colegio
-        if(element.length === 11){
+        if(element.length === 8){
           let resp = {
             colegio: '',
             rut: '',
@@ -426,22 +460,18 @@ module.exports = (app) => {
             dias: 0,
             fecha_inicio: '',
             fecha_termino: '',
-            dias_pago: 0,
-            mes_pago: '',
-            sis_salud: '',
-            pago_fodec: 0,
-            recuperado: 0,
-            perdida: 0,
           } ;
 
-          resp.colegio = col;
+          resp.colegio = element[3];
           resp.rut = element[2];
           resp.nombre= element[1];
           resp.id_licencia= element[4];
-          resp.dias= element[10];
-          resp.fecha_inicio= element[6];
-          resp.fecha_termino= element[7];
+          resp.dias= element[7];
+          dateformated = element[5].split("/")[1]+ '/' + element[5].split("/")[0] +'/' + element[5].split("/")[2];
+          resp.fecha_inicio= dateformated;
+          resp.fecha_termino= dateformated = element[6].split("/")[1]+ '/' + element[6].split("/")[0] +'/' + element[6].split("/")[2];
           temp.push(resp);
+          console.log(temp);
           upLicencia(resp);
         }
     });
@@ -478,10 +508,10 @@ module.exports = (app) => {
 
     let dst = [];
     let result = [];
-    result = convertExcel.readFile(src, {type:'buffer'});
+    result = convertExcel.readFile(src, {type:'buffer', cellDates:true, cellText:false});
     let sheet = result.SheetNames[0];
     sheet = result.Sheets[sheet];
-    result = convertExcel.utils.sheet_to_json(sheet,{header:1});
+    result = convertExcel.utils.sheet_to_json(sheet,{header:1, dateNF:"DD-MM-YYYY"});
 
 
     let temp=[];
@@ -511,7 +541,7 @@ module.exports = (app) => {
           } ;
 
           //console.log(Number(element[4]) === 0);
-          if (parseInt(element[4]) > 0)
+          if (parseInt(element[9]) > 0)
           {
             resp.rut = element[1];
             resp.nombre= element[2];

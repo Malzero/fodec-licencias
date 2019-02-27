@@ -28,34 +28,6 @@ const LicenciaSchema = new mongoose.Schema({
   fecha_termino: {
     type: String,
     default: ''
-  },
-  dias_pago: {
-    type: Number,
-    default: 0
-  },
-  mes_pago: {
-    type: String,
-    default: ''
-  },
-  sis_salud: {
-    type: String,
-    default: ''
-  },
-  pago_fodec: {
-    type: Number,
-    default: 0
-  },
-  estado: {
-    type: String,
-    default: 'EN ESPERA'
-  },
-  recuperado: {
-    type: Number,
-    default: 0
-  },
-  perdida: {
-    type: Number,
-    default: 0
   }
 });
 

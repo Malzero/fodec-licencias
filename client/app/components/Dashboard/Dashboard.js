@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import ReactTable from 'react-table';
-import Converter from '../Converter/Converter';
 import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
 import ModalTest from '../ModalTest/ModalTest'
+import ModalLicencias from '../ModalLicencias/ModalLicencias'
 import Header from "../Header/Header";
 
 
@@ -14,20 +14,24 @@ class Dashboard extends Component {
 
     this.state = {
       licencias: [],
+      resumenes: [],
       data: [],
       temp: [],
     };
-    this.getTabla = this.getTabla.bind(this);
+
+    this.getTabla2 = this.getTabla2.bind(this);
     this.renderEditable = this.renderEditable.bind(this);
   }
-  componentDidMount(){
-    this.getTabla();
+
+  componentDidMount() {
+    this.getTabla2();
   }
 
-  getTabla() {
-    fetch('/api/admin/licencias/get')
+
+  getTabla2() {
+    fetch('/api/admin/licencias/get2')
       .then(results => results.json())
-      .then(results => this.setState({licencias: results}))//this.setState({licencias: results}))
+      .then(results => this.setState({resumenes: results}))
       .catch(error => console.log("parsing fail", error))
   }
 
@@ -35,13 +39,13 @@ class Dashboard extends Component {
   renderEditable(cellInfo) {
     return (
       <div
-        style={{ backgroundColor: "#fafafa" }}
+        style={{backgroundColor: "#fafafa"}}
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
           const data = [...this.state.data];
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          this.setState({ data });
+          this.setState({data});
         }}
         dangerouslySetInnerHTML={{
           __html: this.state.data[cellInfo.index][cellInfo.column.id]
@@ -57,54 +61,71 @@ class Dashboard extends Component {
 
     const columns =
       [{
-      Header: 'id_licencia',
-      accessor: 'id_licencia' // String-based value accessors!
-      },
-      {
-        Header: 'rut',
-        accessor: 'rut' // String-based value accessors!
-      },
-      {
-        Header: 'nombre',
-        accessor: 'nombre' // String-based value accessors!
-      },
-      {
-        Header: 'colegio',
+        Header: 'Colegio',
         accessor: 'colegio' // String-based value accessors!
       },
-      {
-        Header: 'dias',
-        accessor: 'dias' // String-based value accessors!
-      },
-      {
-        Header: 'fecha inicio',
-        accessor: 'fecha_inicio' // String-based value accessors!
-      },
-      {
-        Header: 'fecha termino',
-        accessor: 'fecha_termino' // String-based value accessors!
-      },
+        {
+          Header: 'Rut',
+          accessor: 'rut' // String-based value accessors!
+        },
+        {
+          Header: 'Nombre',
+          accessor: 'nombre' // String-based value accessors!
+        },
+        {
+          Header: 'Días Pago',
+          accessor: 'dias_pago' // String-based value accessors!
+        },
+        {
+          Header: 'Días Totales',
+          accessor: 'dias_total' // String-based value accessors!
+        },
+        {
+          Header: 'Mes Pago',
+          accessor: 'mes_pago' // String-based value accessors!
+        },
+        {
+          Header: 'Sistema Salud',
+          accessor: 'sis_salud' // String-based value accessors!
+        },
+        {
+          Header: 'Pago FODEC',
+          accessor: 'pago_fodec' // String-based value accessors!
+        },
+        {
+          Header: 'Estado',
+          accessor: 'estado' // String-based value accessors!
+        },
+        {
+          Header: 'Recuperado',
+          accessor: 'recuperado' // String-based value accessors!
+        },
+        {
+          Header: 'Pérdida',
+          accessor: 'perdida' // String-based value accessors!
+        },
         {
           Header: 'Opciones',
-        },
-    ];
+          accessor: 'rut',
+          Cell: row => <ModalLicencias rut={row.original.rut}/>,
+        }];
 
 
     return (
 
       <div>
         <ButtonToolbar>
-          <ModalTest  />
+          <ModalTest/>
         </ButtonToolbar>
         <br/>
         <ReactTable
-          data={this.state.licencias}//{data}
+          data={this.state.resumenes}//{data}
           columns={columns}
           filterable
         />
       </div>
     );
   }
-
 }
+
 export default Dashboard;

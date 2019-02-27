@@ -39,18 +39,26 @@ module.exports = merge(commonConfig, {
         ]
       },
       {
+        // Transform our own .css files with PostCSS and CSS-modules
         test: /\.css$/,
+        exclude: /node_modules/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(css)$/,
         include: /node_modules/,
         loader: [
           require.resolve('style-loader'),
           {
             loader: require.resolve('css-loader'),
-            options: {
+            options:
+              {
               importLoaders: 1,
               minimize: true,
-            },
+              },
+
           }
-        ]
+        ],
       }
     ]
   }
