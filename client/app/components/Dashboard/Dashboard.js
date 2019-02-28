@@ -15,6 +15,8 @@ class Dashboard extends Component {
     this.state = {
       licencias: [],
       resumenes: [],
+      indexRut:[],
+
       data: [],
       temp: [],
     };
@@ -116,7 +118,18 @@ class Dashboard extends Component {
         {
           Header: 'Opciones',
           accessor: 'rut',
-          Cell: row => <ModalLicencias rut={row.original.rut}/>,
+          Cell: row => <ModalLicencias
+            index={row.index}
+
+            indexRut = {this.state.indexRut.push(
+            {
+              'index': row.index,
+              'rut': row.original.rut,
+            }
+          )}
+
+            todo = {this.state.indexRut}
+          />,
         }];
 
 

@@ -9,22 +9,56 @@ class BarraDiferencia extends Component {
     super();
 
     this.state = {
-      licencias: [],
+      resumenes: [],
       data: [],
       temp: [],
+      perdidas: [],
     };
     this.getTabla = this.getTabla.bind(this);
     this.renderEditable = this.renderEditable.bind(this);
+    this.getPerdida = this.getPerdida.bind(this);
+
   }
   componentDidMount(){
     this.getTabla();
   }
 
   getTabla() {
-    fetch('/api/admin/licencias/get')
+    fetch('/api/admin/licencias/get2')
       .then(results => results.json())
-      .then(results => this.setState({licencias: results}))//this.setState({licencias: results}))
+      .then(results => this.setState({resumenes: results}))//this.setState({licencias: results}))
       .catch(error => console.log("parsing fail", error))
+  }
+
+
+  getPerdida(resumenes){
+    let temp = [];
+    let boo;
+
+    resumenes.forEach(function (resumen) {
+      boo = false;
+      temp.forEach(function (element) {
+
+        if (element.name === resumen.sis_salud)
+        {
+          boo = true;
+          element["Pérdida FODEC"] += resumen.perdida;
+        }
+      });
+
+
+      if (!boo)
+      {
+        temp.push({
+          "name": resumen.sis_salud,
+          "Devolución Isapre": resumen.recuperado,
+          "Pérdida FODEC": resumen.perdida,
+          "atm": resumen.perdida
+        })
+      }
+
+    });
+    return temp;
   }
 
   renderEditable(cellInfo) {
@@ -48,57 +82,18 @@ class BarraDiferencia extends Component {
 
   render() {
 
-    const data = this.state.licencias;
-    const data2 = [
-      {
-        "name": "Cruz Blanca",
-        "Devolución Isapre": 1234,
-        "Pérdida FODEC": 2400,
-        "amt": 2400
-      },
-      {
-        "name": "Banmédica",
-        "Devolución Isapre": 3000,
-        "Pérdida FODEC": 1398,
-        "amt": 2210
-      },
-      {
-        "name": "Consalud",
-        "Devolución Isapre": 2000,
-        "Pérdida FODEC": 9800,
-        "amt": 2290
-      },
-      {
-        "name": "Masvida",
-        "Devolución Isapre": 2780,
-        "Pérdida FODEC": 3908,
-        "amt": 2000
-      },
-      {
-        "name": "Colmena",
-        "Devolución Isapre": 1890,
-        "Pérdida FODEC": 4800,
-        "amt": 2181
-      },
-      {
-        "name": "Vidatres",
-        "Devolución Isapre": 2390,
-        "Pérdida FODEC": 3800,
-        "amt": 2500
-      },
-      {
-        "name": "Fonasa",
-        "Devolución Isapre": 3490,
-        "Pérdida FODEC": 4300,
-        "amt": 2100
-      }
-    ];
+    const data = this.state.resumenes;
+
+
+
+    const data2 = this.getPerdida(data);
+
 
 
     //SACAR DATOS DE LICENCIA
-data.forEach(function (licencia) {//Por cada elemento en data, desde ahora licencia
+data2.forEach(function (licencia) {//Por cada elemento en data, desde ahora licencia
 
-  console.log(licencia.perdida);//Imprimo la propiedad perdida de licencia
+  console.log(licencia);//Imprimo la propiedad perdida de licencia
 });
 
 
@@ -118,8 +113,6 @@ data.forEach(function (licencia) {//Por cada elemento en data, desde ahora licen
         </BarChart>
 
         <br/>
-
-      <Footer/>
       </div>
     );
   }

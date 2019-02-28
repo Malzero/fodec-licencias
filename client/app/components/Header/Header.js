@@ -24,7 +24,7 @@ const Header = () => (
     </Navbar.Header>
     <Navbar.Collapse>
 
-      <Nav pullLeft bsStyle="large">
+      <Nav pullLeft>
         <NavItem eventKey={1} href="#">
           Generar Reporte
         </NavItem>
