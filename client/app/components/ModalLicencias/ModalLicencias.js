@@ -28,26 +28,25 @@ class ModalLicencias extends React.Component {
     this.setState(nextProps)
   }
 
-  componentDidMount(){
-    this.getTabla();
-  }
+
 
   getTabla() {
 
     let rut = '';
-   /* let temp = this.state.todo;
+   let temp = this.state.todo;
+   let inde = this.state.inde;
    //console.log(temp);
     temp.forEach(function (element) {
-      console.log(this.state.inde );
-      if(this.state.inde === element.index)
+      console.log( inde);
+      if(inde === element.index)
       {
         rut = element.rut;
 
       }
     });
-*/
+
     //post request al backend
-    fetch('/api/admin/licencias/get', {
+    fetch('http://192.168.1.159:8080/api/admin/licencias/get', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -70,6 +69,11 @@ class ModalLicencias extends React.Component {
   handleShow() {
     this.setState({ show: true });
   }
+
+  componentDidMount(){
+    this.getTabla();
+  }
+
 
   render() {
 
