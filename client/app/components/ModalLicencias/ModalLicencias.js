@@ -17,6 +17,7 @@ class ModalLicencias extends React.Component {
       original: props.original,
       inde: props.index,
       todo: props.todo,
+      rut: props.rut,
 
     };
     this.handleShow = this.handleShow.bind(this);
@@ -31,19 +32,16 @@ class ModalLicencias extends React.Component {
 
 
   getTabla() {
-
-    let rut = '';
-   let temp = this.state.todo;
-   let inde = this.state.inde;
+    //let rut = this.state.rut;
    //console.log(temp);
-    temp.forEach(function (element) {
+   /* temp.forEach(function (element) {
       console.log( inde);
       if(inde === element.index)
       {
         rut = element.rut;
 
       }
-    });
+    });*/
 
     //post request al backend
     fetch('http://192.168.1.159:8080/api/admin/licencias/get', {
@@ -52,7 +50,7 @@ class ModalLicencias extends React.Component {
         'Content-Type': 'application/json'
       },
       body:JSON.stringify({
-        rut: rut,
+        rut: this.state.rut,
       }),
     }).then(res => res.json())
       .then(res => this.setState({licencias: res}))
@@ -64,18 +62,27 @@ class ModalLicencias extends React.Component {
   }
   handleInit() {
     console.log('FilePond instance has initialised', this.pond);
+
   }
 
   handleShow() {
+
     this.setState({ show: true });
   }
 
   componentDidMount(){
+
+  }
+
+  handleClick(){
+    this.setState({ show: true });
     this.getTabla();
   }
 
 
   render() {
+
+
 
 
     const columns =
@@ -117,12 +124,10 @@ class ModalLicencias extends React.Component {
     let close = () => this.setState({ show: false });
     return (
       <ButtonToolbar>
-        <Button onClick={() =>
-          this.setState({ show: true })
-
-
-        }>
-          Ver Licencias
+        <Button onClick={(e) => this.handleClick(e)}>
+          Ver Licencias "{this.state.inde}"
+          <br/>
+          {this.state.rut}
         </Button>
 
           <Modal

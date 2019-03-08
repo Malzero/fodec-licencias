@@ -119,12 +119,12 @@ class Dashboard extends Component {
           Header: 'Opciones',
           accessor: 'rut',
           Cell: row => <ModalLicencias
-            index={row.index}
+            rut={row.row.rut}
 
             indexRut = {this.state.indexRut.push(
             {
               'index': row.index,
-              'rut': row.original.rut,
+              'rut': row.row.rut,
             }
           )}
 

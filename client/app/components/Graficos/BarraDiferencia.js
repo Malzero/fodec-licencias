@@ -7,7 +7,6 @@ class BarraDiferencia extends Component {
 
   constructor() {
     super();
-
     this.state = {
       resumenes: [],
       data: [],
@@ -34,7 +33,6 @@ class BarraDiferencia extends Component {
   getPerdida(resumenes){
     let temp = [];
     let boo;
-
     resumenes.forEach(function (resumen) {
       boo = false;
       temp.forEach(function (element) {
@@ -45,8 +43,6 @@ class BarraDiferencia extends Component {
           element["Pérdida FODEC"] += resumen.perdida;
         }
       });
-
-
       if (!boo)
       {
         temp.push({
@@ -56,7 +52,6 @@ class BarraDiferencia extends Component {
           "atm": resumen.perdida
         })
       }
-
     });
     return temp;
   }
@@ -83,21 +78,13 @@ class BarraDiferencia extends Component {
   render() {
 
     const data = this.state.resumenes;
-
-
-
     const data2 = this.getPerdida(data);
-
-
 
     //SACAR DATOS DE LICENCIA
 data2.forEach(function (licencia) {//Por cada elemento en data, desde ahora licencia
 
   console.log(licencia);//Imprimo la propiedad perdida de licencia
 });
-
-
-
     return (
 
       <div align="center">
@@ -111,7 +98,6 @@ data2.forEach(function (licencia) {//Por cada elemento en data, desde ahora lice
           <Bar dataKey="Devolución Isapre" fill="green" />
           <Bar dataKey="Pérdida FODEC" fill="#82ca9d" />
         </BarChart>
-
         <br/>
       </div>
     );
