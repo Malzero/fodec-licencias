@@ -4,7 +4,9 @@ import Modal from 'react-bootstrap/es/Modal';
 import Button from "react-bootstrap/es/Button";
 import {setInStorage} from "../../utils/storage";
 import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
-import './custom.css'
+import './custom.css';
+import verImage from '../../../public/assets/img/eye.png';
+import editImage from '../../../public/assets/img/Pencil.png';
 
 
 class ModalLicencias extends React.Component {
@@ -125,9 +127,10 @@ class ModalLicencias extends React.Component {
     return (
       <ButtonToolbar>
         <Button onClick={(e) => this.handleClick(e)}>
-          Ver Licencias "{this.state.inde}"
-          <br/>
-          {this.state.rut}
+          <div><img src={verImage} style={{width: 20, height: 20}}/></div>
+        </Button>
+        <Button onClick={(e) => this.handleClick(e)}>
+          <div><img src={editImage} style={{width: 20, height: 20}}/></div>
         </Button>
 
           <Modal

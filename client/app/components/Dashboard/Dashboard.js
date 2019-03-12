@@ -3,7 +3,8 @@ import ReactTable from 'react-table';
 import ButtonToolbar from "react-bootstrap/es/ButtonToolbar";
 import ModalTest from '../ModalTest/ModalTest'
 import ModalLicencias from '../ModalLicencias/ModalLicencias'
-import Header from "../Header/Header";
+import { Grid, Row, Col } from 'react-bootstrap';
+
 
 
 
@@ -85,11 +86,7 @@ class Dashboard extends Component {
         },
         {
           Header: 'Días Pago',
-          accessor: 'dias_pago' // String-based value accessors!
-        },
-        {
-          Header: 'Días Totales',
-          accessor: 'dias_total' // String-based value accessors!
+          accessor: 'dias_pago', // String-based value accessors!
         },
         {
           Header: 'Mes Pago',
@@ -118,18 +115,25 @@ class Dashboard extends Component {
         {
           Header: 'Opciones',
           accessor: 'rut',
-          Cell: row => <ModalLicencias
-            rut={row.row.rut}
+          Cell: row => (
 
-            indexRut = {this.state.indexRut.push(
-            {
-              'index': row.index,
-              'rut': row.row.rut,
-            }
-          )}
+            <Grid>
+              <Col>
+                <ModalLicencias
+                  rut={row.row.rut}
 
-            todo = {this.state.indexRut}
-          />,
+                  indexRut = {this.state.indexRut.push(
+                    {
+                      'index': row.index,
+                      'rut': row.row.rut,
+                    }
+                  )}
+
+                  todo = {this.state.indexRut}
+                />
+              </Col>
+            </Grid>
+          )
         }];
 
 
