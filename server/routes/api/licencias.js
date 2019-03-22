@@ -30,6 +30,22 @@ const centCosto =
       20: 'INSTANCIA CENTRAL',
     }];
 
+const meses =
+  [
+    "ENERO",
+    "FEBRERO",
+    "MARZO",
+    "ABRIL",
+    "MAYO",
+    "JUNIO",
+    "JULIO",
+    "AGOSTO",
+    "SEPTIEMBRE",
+    "OCTUBRE",
+    "NOVIEMBRE",
+    "DICIEMBRE",
+  ];
+
 
 function upLicencia(converted) {
 
@@ -42,10 +58,8 @@ function upLicencia(converted) {
     headers: {'Content-Type' : 'application/json'},
   })
     .then(res => res.json())
-    .then(json => console.log(json))
     .catch(err => console.error(err));
 }
-
 function upResumen(converted) {
 
   //sacar state
@@ -60,7 +74,6 @@ function upResumen(converted) {
     .then(json => console.log(json))
     .catch(err => console.error(err));
 }
-
 function upConvert() {
 
   //sacar state
@@ -77,6 +90,17 @@ function upConvert2() {
   //sacar state
   //post request al backend
   fetch('http://192.168.1.159:8080/api/admin/licencias/convert2', {
+    method: 'get',
+  })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
+}
+function upConvert3() {
+
+  //sacar state
+  //post request al backend
+  fetch('http://192.168.1.159:8080/api/admin/licencias/convert3', {
     method: 'get',
   })
     .then(res => res.json())
@@ -453,7 +477,7 @@ module.exports = (app) => {
         Resumen.findOne({ rut: resumenes[i].rut }, function (err, doc){
           if (doc.perdida === 0)
           {
-            doc.perdida = doc.recuperado - doc.pago_fodec;
+            doc.perdida = (doc.recuperado - doc.pago_fodec) * -1 ;
             doc.save();
           }
 
@@ -476,7 +500,6 @@ module.exports = (app) => {
     }];
 
 
-    //console.log("entre a la api convert");
     let dir_xls = './server/uploads/files/softland1/Softland1.xls';
     let dir_xlsx = './server/uploads/files/softland1/Softland1.xlsx';
 
@@ -497,8 +520,6 @@ module.exports = (app) => {
       })
     }
 
-    let dst = [];
-    let result = [];
     result = convertExcel.readFile(src, {type:'buffer', cellDates:true, cellText:false});
     let sheet = result.SheetNames[0];
     sheet = result.Sheets[sheet];
@@ -643,6 +664,98 @@ module.exports = (app) => {
     });
     return res.json(temp);
   });
+  app.get('/api/admin/licencias/convert3', (req, res) => {
+
+    let options = [{
+      sheet:'1',
+      isColOriented: false,
+      omitEmtpyFields: false,
+    }];
+
+    //console.log("entre a la api convert");
+    let dir_xls = './server/uploads/files/fonasa/fonasa.xls';
+    let dir_xlsx = './server/uploads/files/fonasa/fonasa.xlsx';
+
+    let src;
+
+    if (fs.existsSync(dir_xls))
+    {
+      src = dir_xls;
+    }
+    else if (fs.existsSync(dir_xlsx))
+    {
+      src = dir_xlsx;
+    }
+    else{
+      return res.send({
+        success: false,
+        message: 'Error, no existe archivo para convertir'
+      })
+    }
+
+    result = convertExcel.readFile(src, {type:'buffer', cellDates:true, cellText:false});
+    let sheet = result.SheetNames[0];
+    sheet = result.Sheets[sheet];
+    result = convertExcel.utils.sheet_to_json(sheet,{header:1, dateNF:"DD-MM-YYYY"});
+
+    let fecha =result[1][22];
+    let mes = meses[parseInt(fecha.split('/')[0]) - 1];
+    let ano = "20" + fecha.split('/')[2];
+
+    let rut;
+
+    result.forEach(function(element){
+
+      if (element [0] !== 'RUT EMPRESA')
+      {
+
+        rut = element[5] + "-" + element[6];
+        while (rut.length<11) {
+          rut = "0" + rut;
+        }
+        rut = rut.slice(0,3) + "." + rut.slice(3,6) + "." + rut.slice(6,12);
+        console.log(rut);
+        Resumen.find({ rut: rut }, function (err, doc){
+
+          console.log(doc);
+
+          if (doc.length > 0){
+            console.log(doc.length);
+            doc.forEach(function (err,resumen) {
+
+              if (resumen!==[])
+              {
+
+                console.log(parseInt(element[13]));
+                console.log(resumen.mes_pago + '=' + mes);
+                console.log(resumen.ano_pago + '=' + ano);
+                if (resumen.mes_pago === mes && resumen.ano_pago === ano)
+                {
+                  console.log('recuperado ingresado' + element[13]);
+
+                  resumen.recuperado = resumen.recuperado + parseInt(element[13]) ;
+                  resumen.save();
+
+                }
+              }
+
+            });
+            /*Licencia.findOne({id_licencia: element[8]}, function (err, doc) {
+              doc.pago_licencia = parseInt(element[13]);
+              doc.save();
+              console.log('recuperado ingresado en licencias' + element[13]);
+            });*/
+          }
+        });
+
+      }
+
+    });
+    return res.send({
+      success: true,
+      message: 'recuperados ingresados '
+    })
+  });
   app.post('/api/admin/licencias/upload1', (req, res) => {
     let form = new multiparty.Form({ uploadDir: './server/uploads/files/softland1/' });
     let filename;
@@ -754,6 +867,66 @@ module.exports = (app) => {
           }
         });
         upConvert2();
+      });
+
+      res.writeHead(200, {'content-type': 'text/plain'});
+      res.write('received upload:\n\n');
+      res.end(util.inspect({fields: fields, files: files}));
+    });
+
+
+  });
+  app.post('/api/admin/licencias/upload3', (req, res) => {
+    let form = new multiparty.Form({ uploadDir: './server/uploads/files/fonasa/' });
+    let filename;
+    let extension;
+    let temp;
+    let dir = './server/uploads/files/fonasa/';
+    form.parse(req, function(err, fields, files) {
+      files['filepond'].forEach(function (file) {//Por cada elemento en data, desde ahora licencia
+
+        console.log(file.path);//Imprimo la propiedad perdida de licencia
+        temp = file.path.split('\\')[4];
+        filename = temp.split('.')[0];
+        extension = temp.split('.')[1];
+        fs.rename( dir + filename + '.' + extension,dir + "fonasa." + extension, function (err) {
+          if (err)
+          {
+            //console.log('rename callback', err);
+          }
+          else {
+            console.log('rename good');
+          }
+          if (extension === 'xls' && fs.existsSync(dir + "fonasa." + 'xlsx'))
+          {
+            fs.unlink(dir + "fonasa." + 'xlsx', function (err) {
+
+              if (err)
+              {
+                console.log('Problema al borrar el archivo')
+              }
+              else {
+                console.log('Borrado con exito softland2.xlsx')
+              }
+
+            });
+          }
+          if (extension === 'xlsx' && fs.existsSync(dir + "fonasa." + 'xls'))
+          {
+            fs.unlink(dir + "fonasa." + 'xls', function (err) {
+
+              if (err)
+              {
+                console.log('Problema al borrar el archivo')
+              }
+              else {
+                console.log('Borrado con exito fonasa.xls')
+              }
+
+            });
+          }
+        });
+        upConvert3();
       });
 
       res.writeHead(200, {'content-type': 'text/plain'});

@@ -17,7 +17,8 @@ class ModalTest extends React.Component {
     this.state = {
       show: false,
       files: [],
-      files2: []
+      files2: [],
+      files3:[]
     };
   }
 
@@ -88,6 +89,26 @@ class ModalTest extends React.Component {
                 // Set currently active file objects to this.state
                 this.setState({
                   files2: fileItems.map(fileItem => fileItem.file)
+                });
+              }}>
+            </FilePond>
+
+          </Modal.Body>
+          <Modal.Body>
+
+            <p>
+              Nómina Pago FONASA
+            </p>
+            <FilePond
+              // ref={ref => this.pond = ref}
+              files={this.state.files3}
+              labelIdle="Arrastre y suelte el archivo Excel aca o busque desde el explorador haciendo <span> Click </span>"
+              server="http://192.168.1.159:8080/api/admin/licencias/upload3"
+              oninit={() => this.handleInit() }
+              onupdatefiles={fileItems => {
+                // Set currently active file objects to this.state
+                this.setState({
+                  files3: fileItems.map(fileItem => fileItem.file)
                 });
               }}>
             </FilePond>

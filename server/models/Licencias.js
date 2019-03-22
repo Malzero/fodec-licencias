@@ -28,7 +28,11 @@ const LicenciaSchema = new mongoose.Schema({
   fecha_termino: {
     type: String,
     default: ''
-  }
+  },
+  pago_licencia: {
+    type: Number,
+    default: 0
+  },
 });
 
 
