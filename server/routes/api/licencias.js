@@ -30,6 +30,8 @@ const centCosto =
       20: 'INSTANCIA CENTRAL',
     }];
 
+let buff;
+
 const meses =
   [
     "ENERO",
@@ -106,6 +108,44 @@ function upConvert3() {
     .then(res => res.json())
     .then(json => console.log(json))
     .catch(err => console.error(err));
+}
+function buscaRut(rut, element, mes, ano){
+
+  Resumen.find({ rut: rut }).exec()
+    .then(function (doc){
+      if (doc.length > 0){
+        console.log(rut);
+        console.log(doc);
+          let mes_pago;
+          let ano_pago;
+          console.log(doc);
+          mes_pago = doc[0].mes_pago;
+          ano_pago = doc[0].ano_pago;
+
+          console.log(parseInt(element[13]));
+          console.log(mes_pago + '=' + mes);
+          console.log(ano_pago + '=' + ano);
+          if (mes_pago === mes && ano_pago === ano) {
+
+            console.log(doc[0].recuperado);
+            doc[0].recuperado = doc[0].recuperado + parseInt(element[13]);
+            console.log(doc[0].recuperado);
+            doc[0].save();
+            console.log('recuperado ingresado' + element[13]);
+
+          }
+      }
+    })
+    .then(undefined, function (err) {
+      console.log(err)
+    })
+    .then(getUpdate());
+
+}
+function getUpdate() {
+  fetch('http://192.168.1.159:8080/api/admin/licencias/update_per')
+    .then(results => results.json())
+    .catch(error => console.log("error update", error))
 }
 
 module.exports = (app) => {
@@ -307,7 +347,6 @@ module.exports = (app) => {
     //Licencia repetida: mismo rut, mes_pago y ano_pago
     Resumen.find({
       rut: rut
-
     }, (err, previousResumen) => {
 
       if (err){
@@ -600,7 +639,7 @@ module.exports = (app) => {
     let ano = fecha.split(' ')[1];
     let col;
 
-    console.log(centCosto[0]['7']);
+   // console.log(centCosto[0]['7']);
 
     result.forEach(function(element){
 
@@ -709,53 +748,33 @@ module.exports = (app) => {
       if (element [0] !== 'RUT EMPRESA')
       {
 
-        rut = element[5] + "-" + element[6];
-        while (rut.length<11) {
+        rut = element[5]; //+ "-" + element[6];
+        while (rut.length < 9) {
           rut = "0" + rut;
         }
-        rut = rut.slice(0,3) + "." + rut.slice(3,6) + "." + rut.slice(6,12);
-        console.log(rut);
-        Resumen.find({ rut: rut }, function (err, doc){
+        rut = rut.slice(0,3) + "." + rut.slice(3,6) + "." + rut.slice(6,10) + "-" + element[6];
 
-          console.log(doc);
+          let resumen = buscaRut(rut, element, mes, ano);
 
-          if (doc.length > 0){
-            console.log(doc.length);
-            doc.forEach(function (err,resumen) {
 
-              if (resumen!==[])
-              {
+        /*Licencia.findOne({id_licencia: element[8]}, function (err, doc) {
+          doc.pago_licencia = parseInt(element[13]);
+          doc.save();
+          console.log('recuperado ingresado en licencias' + element[13]);
+        });*/
 
-                console.log(parseInt(element[13]));
-                console.log(resumen.mes_pago + '=' + mes);
-                console.log(resumen.ano_pago + '=' + ano);
-                if (resumen.mes_pago === mes && resumen.ano_pago === ano)
-                {
-                  console.log('recuperado ingresado' + element[13]);
-
-                  resumen.recuperado = resumen.recuperado + parseInt(element[13]) ;
-                  resumen.save();
-
-                }
-              }
-
-            });
-            /*Licencia.findOne({id_licencia: element[8]}, function (err, doc) {
-              doc.pago_licencia = parseInt(element[13]);
-              doc.save();
-              console.log('recuperado ingresado en licencias' + element[13]);
-            });*/
-          }
-        });
 
       }
 
     });
+
     return res.send({
       success: true,
       message: 'recuperados ingresados '
     })
   });
+
+
   app.post('/api/admin/licencias/upload1', (req, res) => {
     let form = new multiparty.Form({ uploadDir: './server/uploads/files/softland1/' });
     let filename;

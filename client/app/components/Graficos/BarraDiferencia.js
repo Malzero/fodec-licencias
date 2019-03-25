@@ -41,6 +41,7 @@ class BarraDiferencia extends Component {
         {
           boo = true;
           element["Pérdida FODEC"] += resumen.perdida;
+          element["Devolución Isapre"] += resumen.recuperado;
         }
       });
       if (!boo)
